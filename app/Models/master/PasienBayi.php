@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 class PasienBayi extends Model
 {
     use HasFactory;
+    protected $table = 'pasien_bayi';
+    
     protected function validator(array $data, $desire)
     {
         if($desire=='tambah')

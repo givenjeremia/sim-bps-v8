@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Models\master;
+namespace App\Models\layanan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Obat extends Model
+class IbuHamil extends Model
 {
     use HasFactory;
-    protected $table = 'obat';
 }

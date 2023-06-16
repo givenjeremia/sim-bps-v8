@@ -159,7 +159,7 @@
         <!-- Messages Dropdown Menu Logout -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="fa fa-user"></i> {{ Auth::user()->name }}
+
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <a class="dropdown-item" href="{{ url('/profile') }}" >

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\master;
 
 use App\Models\master\PasienBayi;
 use Illuminate\Http\Request;
@@ -20,9 +20,8 @@ class PasienBayiController extends Controller
     public function index()
     {
         //
-        $bayi = PasienBayi::where('status_hapus', '=', 0)->orderBy('id', 'desc')->get();
-        $bayiArr = json_decode(json_encode($bayi), true);
-        return view('master.bayi', compact('bayiArr'));
+        $pasienBayi = PasienBayi::where('status_hapus', '=', 0)->orderBy('id', 'desc')->get();
+        return view('master.pasien.bayi.index', compact('pasienBayi'));
     }
 
     /**
@@ -82,6 +81,7 @@ class PasienBayiController extends Controller
             $new->created_by = $created_by;
             $new->updated_at = $updated_at;
             $new->updated_by = $updated_by;
+            $new->users_id = 4;
             $new->save();
 
             $id = $new->id;
@@ -92,7 +92,7 @@ class PasienBayiController extends Controller
             $new->updated_by = Auth::user()->id;
             $new->save();
 
-            return redirect()->back()->with('notif_berhasil', 'Pasien berhasil ditambahkan');
+            return redirect()->back()->with('notif_berhasil', 'Pasien Bayi berhasil ditambahkan');
         }
     }
 

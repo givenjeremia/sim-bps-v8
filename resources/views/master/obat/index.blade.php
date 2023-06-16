@@ -111,7 +111,7 @@ aria-labelledby="favoritesModalLabel">
         <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <FORM method="post" action="<?php echo URL::to('/obat_tambah')?>">
+        <FORM method="post" action="{{ route('obat.store') }}">
           <div class="form-group">
             <label>Nama:</label>
             <input type="text" class="form-control" id="txtNama" name="txtNama" placeholder="Nama" autocomplete="off" required>
@@ -179,9 +179,11 @@ aria-labelledby="favoritesModalLabel">
             <div class="card-body">
               <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
-                  <form class="form-horizontal" method="post" action="<?php echo URL::to('/obat_update_data')?>">
+                  <form class="form-horizontal" id="FormUpdateDataAll" method="post" action="">
                     {{ csrf_field() }}
+                    @method('put')
                     <input type="hidden" name="idUpdate" id="idUpdate" value="">
+                    <input type="hidden" name="jenis_update"  value="data_all">
                     <div class="form-group">
                       <label class="control-label col-sm-3" for="nama">Nama</label>
                       <label class="control-label col-sm-8" for="nama">
@@ -226,9 +228,11 @@ aria-labelledby="favoritesModalLabel">
                 </div>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_2">
-                  <form class="form-horizontal" method="post" action="<?php echo URL::to('/obat_update_harga')?>">
+                  <form class="form-horizontal" method="post" id="FormUpdateDataHarga">
                     {{ csrf_field() }}
+                    @method('put')
                     <input type="hidden" name="idUpdate" id="idUpdateHarga" value="">
+                    <input type="hidden" name="jenis_update"  value="data_harga">
                     <div class="form-group row">
                       <label class="control-label col-sm-3" for="nama">Harga</label>
                       <label class="control-label col-sm-8" for="nama">
@@ -251,9 +255,11 @@ aria-labelledby="favoritesModalLabel">
                 </div>
                 <!-- /.tab-content -->
                 <div class="tab-pane" id="tab_3">
-                  <form class="form-horizontal" method="post" action="<?php echo URL::to('/obat_tambah_stok')?>">
+                  <form class="form-horizontal" method="post" id="FormUpdateDataTambahStok">
                     {{ csrf_field() }}
+                    @method('put')
                     <input type="hidden" name="idUpdate" id="idUpdateTambahStok" value="">
+                    <input type="hidden" name="jenis_update"  value="data_tambah_stok">
                     <div class="form-group  row">
                       <label class="control-label col-sm-3" for="nama">Jumlah</label>
                       <label class="control-label col-sm-8" for="nama">
@@ -275,9 +281,11 @@ aria-labelledby="favoritesModalLabel">
                 </div>
                 <!-- /.tab-content -->
                 <div class="tab-pane" id="tab_4">
-                  <form class="form-horizontal" method="post" action="<?php echo URL::to('/obat_kurang_stok')?>">
+                  <form class="form-horizontal" method="post" id="FormUpdateDataKurangStok">
                     {{ csrf_field() }}
+                    @method('put')
                     <input type="hidden" name="idUpdate" id="idUpdateKurangStok" value="">
+                    <input type="hidden" name="jenis_update"  value="data_kurang_stok">
                     <div class="form-group  row">
                       <label class="control-label col-sm-3" for="nama">Jumlah</label>
                       <label class="control-label col-sm-8" for="nama">
@@ -321,12 +329,14 @@ aria-labelledby="favoritesModalLabel">
           <span aria-hidden="true">&times;</span></button> 
         </div> 
         <div class="modal-body"> 
-          <FORM method="post" action="<?php echo URL::to('/obat_hapus')?>"> 
+          <FORM method="post" id="FormTampungDelete"> 
+            @method('delete')
             <div class="form-group"> 
               Apakah anda yakin ingin menghapus data Obat bernama <strong><span id="nametext"></span></strong> ?
             </div> 
             <div class="form-group"> 
               <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
+              <input type="hidden" name="jenis_hapus" value="individu">
               <input type="hidden" name="idHapus" id="idHapus" value="">
               <button class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button> 
               <button class="btn btn-danger">Hapus</button> 
@@ -351,11 +361,14 @@ aria-labelledby="favoritesModalLabel">
           <span aria-hidden="true">&times;</span></button> 
         </div> 
         <div class="modal-body"> 
-          <FORM method="post" action="<?php echo URL::to('/obat_hapusall')?>"> 
+          {{-- Action ID Sembarang Karena All Data --}}
+          <FORM method="post" id="FormDeleteAll" action="{{ route('obat.destroy',1) }}"> 
+            @method('delete')
             <div class="form-group"> 
               <span id="textdel"></span>
             </div> 
             <div class="form-group" id="field_input"> 
+              <input type="hidden" name='jenis_hapus' value="all">
               <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
               <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button> 
               <button class="btn btn-danger" id="btnConfirmHapus">Hapus</button> 
@@ -587,6 +600,11 @@ aria-labelledby="favoritesModalLabel">
 
     total_pcsnya=total_pcs;
     pcsnya=pcs;
+    let action = "{{ route('obat.update', ':id') }}".replace(':id', id)
+    $('#FormUpdateDataAll').attr('action', action);
+    $('#FormUpdateDataHarga').attr('action', action);
+    $('#FormUpdateDataTambahStok').attr('action', action);
+    $('#FormUpdateDataKurangStok').attr('action', action);
 
     document.getElementById('idUpdate').value = id;
     document.getElementById('idUpdateHarga').value = id;
@@ -626,7 +644,8 @@ aria-labelledby="favoritesModalLabel">
 
   function opendeletemodal(id, nama){
     modalHapus.style.display = "block";
-
+    let action = "{{ route('obat.destroy', ':id') }}".replace(':id', id)
+    $('#FormTampungDelete').attr('action', action);
     document.getElementById('idHapus').value =id;
     document.getElementById('nametext').innerHTML = nama;
   }

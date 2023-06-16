@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class JenisLayanan extends Model
 {
     use HasFactory;
+    protected $table = 'layanan';
+    
     protected function validator(array $data, $desire)
     {
         if($desire=='tambah')

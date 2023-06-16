@@ -29,7 +29,7 @@ transform: translateY(5px);
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item active"><a href="<?php echo URL::to('/pasien_dewasa'); ?>">Master Pasien Dewasa</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('pasien-dewasa.index') }}">Master Pasien Dewasa</a></li>
         <li class="breadcrumb-item active">Detail Pasien Dewasa</li>
       </ol>
     </div>
@@ -48,20 +48,20 @@ transform: translateY(5px);
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['no_registrasi']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->no_regis }}</span>
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['nama_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->nama }}</span>
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Tanggal Lahir</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
                     <div class="input-group">
-                      : &nbsp <span> {{$pasienArr['tgl_lahir_ibu']}}</span>
+                      : &nbsp <span> {{ $pasienDewasa->tanggal_lahir }}</span>
                     </div> 
                   </label>
                 </div>
@@ -69,20 +69,20 @@ transform: translateY(5px);
                   <label class="control-label col-sm-4" for="nama">Agama</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
                     <div class="input-group">
-                      : &nbsp <span> {{$pasienArr['agama_ibu']}}</span>
+                      : &nbsp <span> {{ $pasienDewasa->agama }}</span>
                     </div> 
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Alamat</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['alamat_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->alamat }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">No. Telp</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['phone_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->telp }}</span>
                   </label>
                 </div> 
               </div>
@@ -91,31 +91,31 @@ transform: translateY(5px);
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Kelurahan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['kelurahan_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->kelurahan }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Pekerjaan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['pekerjaan_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->pekerjaan }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Pendidikan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['pendidikan_ibu']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->pendidikan }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Buku KIA</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['buku_kia']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->buku_kia }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Tanggal Buku KIA</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['tgl_buku_kia']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->tgl_buku_kia }}</span>
                   </label>
                 </div>
               </div>
@@ -139,14 +139,14 @@ transform: translateY(5px);
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Nama Suami</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['nama_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->nama }}</span>
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Tanggal Lahir</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
                     <div class="input-group">
-                      : &nbsp <span> {{$pasienArr['tgl_lahir_ayah']}}</span>
+                      : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->tanggal_lahir }}</span>
                     </div> 
                   </label>
                 </div>
@@ -154,14 +154,14 @@ transform: translateY(5px);
                   <label class="control-label col-sm-4" for="nama">Agama</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
                     <div class="input-group">
-                      : &nbsp <span> {{$pasienArr['agama_ayah']}}</span>
+                      : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->agama }}</span>
                     </div> 
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Alamat</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['alamat_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->alamat }}</span>
                   </label>
                 </div> 
               </div>
@@ -170,25 +170,25 @@ transform: translateY(5px);
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">No. Telp</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['phone_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->telp }}</span>
                   </label>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Kelurahan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['kelurahan_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->kelurahan }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Pekerjaan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['pekerjaan_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->pekerjaan }}</span>
                   </label>
                 </div> 
                 <div class="form-group row">
                   <label class="control-label col-sm-4" for="nama">Pendidikan</label>
                   <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$pasienArr['pendidikan_ayah']}}</span>
+                    : &nbsp <span> {{ $pasienDewasa->suamiPasienDewasa[0]->pendidikan }}</span>
                   </label>
                 </div> 
               </div>
@@ -228,12 +228,12 @@ transform: translateY(5px);
                      </tr>
                    </thead>
                    <tbody>
-                   @foreach($pasienArr['riwayat_nikah'] as $key => $value) 
+                   @foreach($pasienDewasa->suamiPasienDewasa as $key => $value) 
                     <tr>
-                      <td style="text-align: right;">{{$value['nikah_ke']}}</td>
-                      <td style="text-align: right;">{{$value['lama_nikah']." Tahun"}}</td>
-                      <td>{{$value['sebab_pisah']}}</td>
-                      <td>{{$value['sebab_meninggal']}}</td>
+                      <td style="text-align: right;">{{$value->nikah_ke}}</td>
+                      <td style="text-align: right;">{{$value->lama_nikah." Tahun"}}</td>
+                      <td>{{$value->sebab_pisah}}</td>
+                      <td>{{$value->sebab_meninggal}}</td>
                     </tr> 
                     @endforeach
                   </tbody>

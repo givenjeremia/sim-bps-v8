@@ -79,13 +79,15 @@
         <span aria-hidden="true">&times;</span></button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/pasien_dewasaDelete')?>"> 
+        <FORM id="FormDeleteSingle" method="post" action="<?php echo URL::to('/pasien_dewasaDelete')?>"> 
+          @method('delete')
           <div class="form-group"> 
             Apakah anda yakin ingin menghapus data pasien bernama <b><span id="nametext"></span></b> ?
           </div> 
           <div class="form-group"> 
             <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
             <input type="hidden" name="txtIDDel" id="txtIDDel"></input>
+            <input type="hidden" name='jenis_hapus' value="single">
             <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button>
             <button class="btn btn-danger">Hapus</button> 
           </div> 
@@ -108,13 +110,15 @@
         <span aria-hidden="true">&times;</span></button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/pasien_dewasaDeleteChecked')?>"> 
+        <FORM id="FormDeleteAll" method="post"> 
+          @method('delete')
           <div class="form-group"> 
             <span id="textdel"></span>
           </div> 
           <div class="form-group" id="field_input"> 
             <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
             <input type="hidden" name="txtDeleteAll" id="txtDeleteAll">
+            <input type="hidden" name='jenis_hapus' value="all">
             <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button>
             <button class="btn btn-danger" id="btnConfirmHapus">Hapus</button> 
           </div> 
@@ -138,8 +142,7 @@ aria-labelledby="favoritesModalLabel">
       <span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
-        <form id="regForm" method="POST" action="<?php echo URL::to('/pasien_dewasaTambah'); ?>">
-
+        <form id="regForm" method="POST" action="{{ route('pasien-dewasa.store') }}">
           <!-- One "tab" for each step in the form: -->
           <div class="tab"><b>IDENTITAS IBU:</b>
             <p><input type="text" class="form-control" id="txtNoregis" name="txtNoregis" placeholder="Nama..." oninput="this.className = 'form-control'" required readonly value="<?php echo $noreg; ?>"></p>
@@ -313,8 +316,8 @@ aria-labelledby="favoritesModalLabel">
       <span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
-        <form id="regForm2" method="POST" action="<?php echo URL::to('/pasien_dewasaEdit'); ?>">
-
+        <form id="regForm2" method="POST">
+          @method('put')
           <!-- One "tab" for each step in the form: -->
           <div class="tab2"><b>IDENTITAS IBU:</b>
           <p><input type="text" class="form-control" id="txtNoregisEdit" name="txtNoregisEdit" placeholder="No Regis..." oninput="this.className = 'form-control'" required readonly></p>
@@ -602,29 +605,29 @@ aria-labelledby="favoritesModalLabel">
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($pasienArr as $key => $value) 
+                    @foreach($pasien as $key => $value) 
                     <tr>
                       <td>
                         <label>
-                          <input type="checkbox" class="flat-red" id="{{$value['id']}}" name="chkDel" value="<?php echo $value['id']; ?>">
+                          <input type="checkbox" class="flat-red" id="{{$value->no_regis}}" name="chkDel" value="<?php echo $value['id']; ?>">
                         </label>
                       </td>
                       <td style="text-align: center;">{{($key+1)}}</td>
-                      <td>{{$value['no_registrasi']}}</td>
-                      <td>{{$value['nama_ibu']}}</td>
-                      <td>{{$value['nama_ayah']}}</td>
+                      <td>{{$value->no_regis}}</td>
+                      <td>{{$value->nama}}</td>
+                      <td>{{$value->suamiPasienDewasa[0]->nama}}</td>
                       <!-- <td>{{$value['alamat_ibu']}}</td> -->
-                      <td>{{$value['phone_ibu']}}</td>
+                      <td>{{$value->telp}}</td>
                       <td>
                             <div class="form-group">
                               <div>
-                                <a href="<?php echo URL::to('/pasien_dewasaDetail/'.$value["id"]); ?>" class="btn btn-info" title="Detail" style="width: 40px;"><i class="fa fa-info"></i></a>
+                                <a href="{{ route('pasien-dewasa.show',$value->no_regis) }}" class="btn btn-info" title="Detail" style="width: 40px;"><i class="fa fa-info"></i></a>
 
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#modalEdit" title="Edit" id="<?php echo 'edit'.$key; ?>" onclick="openeditmodal(<?php echo "'". $value["id"] ."'"; ?>);"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modalEdit" title="Edit" id="<?php echo 'edit'.$key; ?>" onclick="openeditmodal('{{ $value->no_regis }}');"><i class="fa fa-edit"></i></button>
 
-                                <a href="{{url('/cetak_kartu_dewasa/'.$value['id'])}}"><button type="button" class="btn btn-warning" title="tambah kartu"><i class="fa fa-print"></i></button></a>
+                                <a href="{{ route('pasien-dewasa.cetak.kartu',['id'=>$value->no_regis]) }}"><button type="button" class="btn btn-warning" title="tambah kartu"><i class="fa fa-print"></i></button></a>
 
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalHapus" title="Hapus" onclick="opendeletemodal(<?php echo "'".$value["id"]."'" ?>,<?php echo "'".$value["nama_ibu"]."'" ?>)"><i class="fa fa-times"></i></button>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalHapus" title="Hapus" onclick="opendeletemodal('{{ $value->no_regis }}','{{ $value->nama }}')"><i class="fa fa-times"></i></button>
                               </div>
                             </div>
                       </td>
@@ -786,24 +789,25 @@ aria-labelledby="favoritesModalLabel">
     }
 
     function openeditmodal(id){
-        var url = <?php echo "'".URL::to('/getDetailPasien')."'"; ?>;
+        let action = "{{ route('pasien-dewasa.update', ':id') }}".replace(':id', id)
+        $('#regForm2').attr('action',action)
+        var url =  "{{ route('pasien-dewasa.edit',':noregis') }}".replace(':noregis', id);
         $.ajax({
           type:"GET",
           url:url,
           data:{pasien_id:id},
           success:function(data){
               var resp = $.parseJSON(data);
-              console.log(resp.tgl_lahir_ayah);
-              document.getElementById('txtIDEdit').value = id;
-              document.getElementById('txtNoregisEdit').value = resp.no_registrasi;
-              document.getElementById('txtNamaibuEdit').value = resp.nama_ibu;
-              document.getElementById('txtTanggalLahiribuEdit').value = resp.tgl_lahir_ibu;
-              document.getElementById('txtAgamaibuEdit').value = resp.agama_ibu;
-              document.getElementById('txtAlamatibuEdit').value = resp.alamat_ibu;
-              document.getElementById('txtPhoneibuEdit').value = resp.phone_ibu;
-              document.getElementById('txtKelurahanibuEdit').value = resp.kelurahan_ibu;
-              document.getElementById('txtPekerjaanibuEdit').value = resp.pekerjaan_ibu;
-              document.getElementById('txtPendidikanibuEdit').value = resp.pendidikan_ibu;
+             
+              document.getElementById('txtNoregisEdit').value = resp.no_regis;
+              document.getElementById('txtNamaibuEdit').value = resp.nama;
+              document.getElementById('txtTanggalLahiribuEdit').value = resp.tanggal_lahir;
+              document.getElementById('txtAgamaibuEdit').value = resp.agama;
+              document.getElementById('txtAlamatibuEdit').value = resp.alamat;
+              document.getElementById('txtPhoneibuEdit').value = resp.telp;
+              document.getElementById('txtKelurahanibuEdit').value = resp.kelurahan;
+              document.getElementById('txtPekerjaanibuEdit').value = resp.pekerjaan;
+              document.getElementById('txtPendidikanibuEdit').value = resp.pendidikan;
               document.getElementById('cboBukuKIAEdit').value = resp.buku_kia;
 
               if(resp.buku_kia == "punya"){
@@ -815,38 +819,44 @@ aria-labelledby="favoritesModalLabel">
                 document.getElementById('tglKIAEdit').value = "";
               }
               
-              document.getElementById('txtNamaayahEdit').value = resp.nama_ayah;
+              document.getElementById('txtNamaayahEdit').value = resp.suami_pasien_dewasa[0].nama;
               if(resp.tgl_lahir_ayah == ""){
                 document.getElementById('txtTanggalLahirayahEdit').value = "";
                 document.getElementById('chkTglEdit').checked = true;
               }
               else{
-                document.getElementById('txtTanggalLahirayahEdit').value = resp.tgl_lahir_ayah;
+                document.getElementById('txtTanggalLahirayahEdit').value = resp.tanggal_lahir;
                 document.getElementById('chkTglEdit').checked = false;
               }
-              document.getElementById('txtAgamaayahEdit').value = resp.agama_ayah;
-              document.getElementById('txtAlamatayahEdit').value = resp.alamat_ayah;
-              document.getElementById('txtPhoneayahEdit').value = resp.phone_ayah;
-              document.getElementById('txtKelurahanayahEdit').value = resp.kelurahan_ayah;
-              document.getElementById('txtPekerjaanayahEdit').value = resp.pekerjaan_ayah;
-              document.getElementById('txtPendidikanayahEdit').value = resp.pendidikan_ayah;
+              document.getElementById('txtAgamaayahEdit').value = resp.suami_pasien_dewasa[0].agama;
+              document.getElementById('txtAlamatayahEdit').value = resp.suami_pasien_dewasa[0].alamat;
+              document.getElementById('txtPhoneayahEdit').value = resp.suami_pasien_dewasa[0].telp;
+              document.getElementById('txtKelurahanayahEdit').value = resp.suami_pasien_dewasa[0].kelurahan;
+              document.getElementById('txtPekerjaanayahEdit').value = resp.suami_pasien_dewasa[0].pekerjaan;
+              document.getElementById('txtPendidikanayahEdit').value = resp.suami_pasien_dewasa[0].pendidikan;
           }
         });
 
     }
 
     function opendeletemodal(id, nama){
+        let action = "{{ route('pasien-dewasa.destroy', ':id') }}".replace(':id', id)
+        $('#FormDeleteSingle').attr('action',action)
         document.getElementById('nametext').innerHTML = nama;
         document.getElementById('txtIDDel').value = id;
     }
 
     function opendeleteallmodal(){
+        let action = "{{ route('pasien-dewasa.destroy', 1) }}"
+        $('#FormDeleteAll').attr('action',action)
         var arrTerpilih = new Array();
         $("input:checkbox[name='chkDel']:checked").each(function(){
           arrTerpilih.push($(this).attr('id'));
+          
         });
         if(arrTerpilih.length>0)
         {
+          console.log(arrTerpilih);
           document.getElementById('txtDeleteAll').value = arrTerpilih;
           document.getElementById("textdel").innerHTML = "Apakah anda yakin ingin menghapus data pasien yang telah dipilih?";
           document.getElementById("btnConfirmHapus").style.visibility = "visible";

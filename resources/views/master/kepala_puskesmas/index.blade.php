@@ -21,7 +21,7 @@
         <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <FORM method="post" action="<?php echo URL::to('/kepala_puskesmas_tambah')?>">
+        <FORM method="post" action="{{ route('kepala-puskesmas.store') }}">
           <div class="form-group">
             <label>Nama:</label>
             <input type="text" class="form-control" id="txtNama" name="txtNama" placeholder="Nama" required>
@@ -52,7 +52,8 @@
         <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <FORM method="post" action="<?php echo URL::to('/kepala_puskesmas_update')?>">
+        <FORM method="post" id="FormEdit">
+          @method('put')
           <input type="hidden" name="idUpdate" id="idUpdate" value="">
           <div class="form-group">
             <label>Nama:</label>
@@ -91,13 +92,14 @@
         <span aria-hidden="true">&times;</span></button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/kepala_puskesmas_hapus')?>"> 
+        <FORM method="post" id="FormDeleteSingle"> 
           <div class="form-group"> 
             Apakah anda yakin ingin menghapus data Kepala Puskesmas bernama <strong><span id="nametext"></span></strong> ?
           </div> 
           <div class="form-group"> 
             <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
             <input type="hidden" name="idHapus" id="idHapus" value="">
+            <input type="hidden" name="jenis_delete" value="single">
             <button class="btn btn-default" class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button> 
             <button class="btn btn-danger">Hapus</button> 
           </div> 
@@ -120,12 +122,13 @@
         <span aria-hidden="true">&times;</span></button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/kepala_puskesmas_deleteall')?>"> 
+        <FORM method="post" id="FormDeleteAll"> 
           <div class="form-group"> 
             <span id="textdel"></span>
           </div> 
           <div class="form-group" id="field_input"> 
             <input type="hidden" name="_token" value="{!!csrf_token()!!}"> 
+            <input type="hidden" name="jenis_delete" name="all">
             <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Tutup</button> 
             <button class="btn btn-danger" id="btnConfirmHapus">Hapus</button> 
           </div> 
@@ -266,8 +269,10 @@
   // }
   var statusnya = '';
   function openeditmodal(id, nama, nip, kelurahan, status){
-    modalEdit.style.display = "block";
+    let action = "{{ route('kepala-puskesmas.update', ':id') }}".replace(':id', id)
+    $('#FormEdit').attr('action', action);
 
+    modalEdit.style.display = "block";
     document.getElementById('idUpdate').value = id;
     document.getElementById('txtNamaEdit').value = nama;
     document.getElementById('txtKelurahanEdit').value = kelurahan;
@@ -278,6 +283,8 @@
   }
 
   function opendeletemodal(id, nama){
+    let action = "{{ route('karyawan.destroy', ':id') }}".replace(':id', id)
+    $('#FormDeleteSingle').attr('action', action);
     modalHapus.style.display = "block";
 
     document.getElementById('idHapus').value =id;
@@ -285,6 +292,8 @@
   }
 
   function opendeleteallmodal(){
+    let action = "{{ route('karyawan.destroy', ':id') }}".replace(':id', id)
+    $('#FormDeleteAll').attr('action', action);
     modalHapusSemua.style.display = "block";
 
     $ischecked = false;

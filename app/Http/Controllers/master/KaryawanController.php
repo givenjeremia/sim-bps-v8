@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\master;
 
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class KaryawanController extends Controller
 {
@@ -20,8 +22,8 @@ class KaryawanController extends Controller
     public function index()
     {
         //
-        $users = User::where('username', '<>', 'super_admin')->where('status_hapus', '<>', 1)->get();
-        return view('master.karyawan', compact('users'));
+        $karyawan = User::where('username', '<>', 'super_admin')->where('status_hapus', '<>', 1)->get();
+        return view('master.karyawan.index', compact('karyawan'));
     }
 
     /**
@@ -43,28 +45,42 @@ class KaryawanController extends Controller
     public function store(Request $request)
     {
         //
-        $validation = new User();
-        $validation = $validation->validator($request->all());
-        if ($validation->fails()) {
+        try {
+            $validation =  Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'username' => 'required|string|max:255|unique:users',
+                'password' => 'required|string|min:6',
+                'nik' => 'required',
+                'alamat' => 'required',
+                'telp' => 'required',
+                'tanggal_lahir' => 'required',
+                'tanggal_gabung' => 'required'
+            ]);
+            if ($validation->fails()) {
+                return redirect()->back()->with(['danger_message' => 'Data karyawan gagal disimpan.']);
+            } else {
+                $new = new User();
+                $new->name = $request->input('name');
+                $new->username = $request->input('username');
+                $new->password = Hash::make($request->input('password'));
+                $new->password_plain = $request->input('password');
+                $new->nik = $request->input('nik');
+                $new->alamat = $request->input('alamat');
+                $new->telp = $request->input('telp');
+                $new->tanggal_lahir = date("Y-m-d", strtotime($request->input('tanggal_lahir')));
+                $new->tanggal_gabung = date("Y-m-d", strtotime($request->input('tanggal_gabung')));
+                $new->created_at = date("Y-m-d H:i:s");
+                $new->updated_at = date("Y-m-d H:i:s");
+                $new->status_hapus = 0;
+                $new->save();
+    
+                return redirect()->back()->with(['message' => 'Data karyawan berhasil disimpan.']);
+            }
+        } catch (\Throwable $th) {
+            dd($th);
             return redirect()->back()->with(['danger_message' => 'Data karyawan gagal disimpan.']);
-        } else {
-            $new = new User();
-            $new->name = $request->input('name');
-            $new->username = $request->input('username');
-            $new->password = Hash::make($request->input('password'));
-            $new->password_plain = $request->input('password');
-            $new->nik = $request->input('nik');
-            $new->alamat = $request->input('alamat');
-            $new->telp = $request->input('telp');
-            $new->tanggal_lahir = date("Y-m-d", strtotime($request->input('tanggal_lahir')));
-            $new->tanggal_gabung = date("Y-m-d", strtotime($request->input('tanggal_gabung')));
-            $new->created_at = date("Y-m-d H:i:s");
-            $new->updated_at = date("Y-m-d H:i:s");
-            $new->status_hapus = 0;
-            $new->save();
-
-            return redirect()->back()->with(['message' => 'Data karyawan berhasil disimpan.']);
         }
+       
     }
 
     /**
@@ -89,6 +105,8 @@ class KaryawanController extends Controller
     public function edit($id)
     {
         //
+        $karyawan = User::find($id);
+        echo json_encode($karyawan);
     }
 
     /**
@@ -100,22 +118,23 @@ class KaryawanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        // $id = $request->input('txtID');
-        $karyawan = User::find($id);
-        $karyawan->name = $request->input('txtNamaKaryawanEdit');
-        $karyawan->username = $request->input('txtUsernameEdit');
-        $karyawan->password = Hash::make($request->input('txtPasswordEdit'));
-        $karyawan->password_plain = $request->input('txtPasswordEdit');
-        $karyawan->nik = $request->input('txtNikEdit');
-        $karyawan->alamat = $request->input('txtAlamatEdit');
-        $karyawan->telp = $request->input('txtPhoneNumberEdit');
-        $karyawan->tanggal_lahir = date("Y-m-d", strtotime($request->input('txtBirthDateEdit')));
-        $karyawan->tanggal_gabung = date("Y-m-d", strtotime($request->input('txtJoinDateEdit')));
-        $karyawan->updated_at = date("Y-m-d H:i:s");
-        $karyawan->save();
-
-        return redirect()->back()->with(['message' => 'Data karyawan berhasil diubah.']);
+        try {
+            $karyawan = User::find($id);
+            $karyawan->name = $request->input('txtNamaKaryawanEdit');
+            $karyawan->username = $request->input('txtUsernameEdit');
+            $karyawan->password = Hash::make($request->input('txtPasswordEdit'));
+            $karyawan->password_plain = $request->input('txtPasswordEdit');
+            $karyawan->nik = $request->input('txtNikEdit');
+            $karyawan->alamat = $request->input('txtAlamatEdit');
+            $karyawan->telp = $request->input('txtPhoneNumberEdit');
+            $karyawan->tanggal_lahir = date("Y-m-d", strtotime($request->input('txtBirthDateEdit')));
+            $karyawan->tanggal_gabung = date("Y-m-d", strtotime($request->input('txtJoinDateEdit')));
+            $karyawan->updated_at = date("Y-m-d H:i:s");
+            $karyawan->save();
+            return redirect()->back()->with(['message' => 'Data karyawan berhasil diubah.']);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with(['danger_message' => 'Data karyawan gagal diubah.']);
+        }
     }
 
     /**
@@ -124,28 +143,31 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
-        $user = User::find($id);
-        $user->status_hapus = 1;
-        $user->updated_at = date("Y-m-d H:i:s");
-        $user->save();
-        return redirect()->back()->with(['message' => 'Data karyawan berhasil dihapus.']);
-    }
-
-    public function destroyChecked(Request $request)
-    {
-        $arrId = $request->input('txtDeleteAll');
-
-        foreach ($arrId as $key => $value) {
-            $user = User::find($value);
-            $user->status_hapus = 1;
-            $user->updated_at = date("Y-m-d H:i:s");
-            $user->save();
+        try {
+            if($request->jenis_delete == 'all'){
+                $arrId = $request->input('txtDeleteAll');
+                foreach ($arrId as $key => $value) {
+                    $user = User::find($value);
+                    $user->status_hapus = 1;
+                    $user->updated_at = date("Y-m-d H:i:s");
+                    $user->save();
+                }
+                return redirect()->back()->with(['message' => 'Data karyawan berhasil dihapus.']);
+            }
+            else{
+                $user = User::find($id);
+                $user->status_hapus = 1;
+                $user->updated_at = date("Y-m-d H:i:s");
+                $user->save();
+                return redirect()->back()->with(['message' => 'Data karyawan berhasil dihapus.']);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with(['danger_message' => 'Data karyawan gagal dihapus.']);
         }
-
-        return redirect()->back()->with(['message' => 'Data karyawan berhasil dihapus.']);
+       
     }
 
     public function getProfile()
@@ -154,52 +176,30 @@ class KaryawanController extends Controller
         return view('master.profile', compact('user'));
     }
 
-    public function cekPassword(Request $request)
+    public function passwordActions(Request $request)
     {
-        $pass = $request->oldpass;
-        $user = User::where('id', '=', Auth::user()->id)->where('status_hapus', '<>', 1)->get();
-        $istrue = "false";
-        if ($user->password_plain == $pass) {
-            $istrue = "true";
+        if($request->jenis_action == 'cek_password'){
+            $pass = $request->oldpass;
+            $user = User::where('id', '=', Auth::user()->id)->where('status_hapus', '<>', 1)->get();
+            $istrue = "false";
+            if ($user->password_plain == $pass) {
+                $istrue = "true";
+            }
+            return $istrue;
         }
-        return $istrue;
-    }
-
-    public function gantiPass(Request $request)
-    {
-        try {
-            $user = User::find(Auth::user()->id);
-            $user->password = Hash::make($request->input('inputNewPass'));
-            $user->password_plain = $request->input('inputNewPass');
-            $user->updated_at = date("Y-m-d H:i:s");
-            $user->save();
-        } catch (Exception $e) {
-            return redirect()->back()->with(['danger_message' => 'Ganti password gagal']);
+        else{
+            try {
+                $user = User::find(Auth::user()->id);
+                $user->password = Hash::make($request->input('inputNewPass'));
+                $user->password_plain = $request->input('inputNewPass');
+                $user->updated_at = date("Y-m-d H:i:s");
+                $user->save();
+            } catch (Exception $e) {
+                return redirect()->back()->with(['danger_message' => 'Ganti password gagal']);
+            }
+    
+            return redirect()->back()->with(['message' => 'Ganti password berhasil']);
         }
-
-        return redirect()->back()->with(['message' => 'Ganti password berhasil']);
-    }
-
-    public function exportTemplate()
-    {
-        Excel::create('template_karyawan', function ($excel) {
-            // Set the title
-            $excel->setTitle('Template Data Master Karyawan');
-            // $excel->setCreator('no no creator')->setCompany('no company');
-            // $excel->setDescription('report file');
-
-            $excel->sheet('sheet1', function ($sheet) {
-                $data = array(
-                    array('id', 'nik', 'name', 'username', 'password', 'alamat', 'telp', 'tanggal_lahir', 'tanggal_gabung'),
-                    array('1', '00000001', 'Adi', 'adi_admin', 'adi123', 'Jl. Kertajaya Indah Timur IX No. 1 Surabaya', '087761525167', '1997-01-01', '2018-01-01'),
-                    array('2', '00000002', 'Bagas', 'bagas_admin', 'bagas123', 'Jl. Kertajaya Indah Timur IX No. 1 Surabaya', '087761525167', '1997-01-01', '2018-01-01')
-                );
-                $sheet->fromArray($data, null, 'A1', false, false);
-                $sheet->cells('A1:I1', function ($cells) {
-                    $cells->setBackground('#AAAAFF');
-                });
-            });
-        })->download('xlsx');
     }
 
     public function importKaryawan(Request $request)

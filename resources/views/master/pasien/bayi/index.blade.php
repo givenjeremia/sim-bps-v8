@@ -376,17 +376,16 @@ aria-labelledby="favoritesModalLabel">
                          </tr>
                        </thead>
                        <tbody>
-                        @foreach($bayiArr as $key => $value) 
+                        @foreach($pasienBayi as $key => $value) 
                         <tr>
-                          <td style="text-align: center;"><input type="checkbox" class="flat-red icheckbox" name="cbxHapusTerpilih" id="{{$value['id']}}"></td>
+                          <td style="text-align: center;"><input type="checkbox" class="flat-red icheckbox" name="cbxHapusTerpilih" id="{{$value->no_regis}}"></td>
                           <td style="text-align: center;">{{($key+1)}}</td>
-                          <td>{{$value['no_registrasi']}}</td>
-                          <td>{{$value['nama']}}</td>
-                          <?php $kelamin = "Laki-Laki"; if($value['kelamin']=='P') $kelamin = "Perempuan"; ?>
-                          <td>{{$kelamin}}</td>
-                          <td style="text-align:center;">{{date("d-m-Y", strtotime($value['tanggal_lahir']))}}</td>
-                          <td>{{$value['nama_ayah']}}</td>
-                          <td>{{$value['nama_ibu']}}</td>
+                          <td>{{$value->no_regis}}</td>
+                          <td>{{$value->nama}}</td>
+                          <td>{{ $value->kelamin=='P' ? 'Perempuan' : 'Laki-Laki' }}</td>
+                          <td style="text-align:center;">{{ date("d-m-Y", strtotime($value->tanggal_lahir)) }}</td>
+                          <td>{{ $value->nama_ayah }}</td>
+                          <td>{{ $value->nama_ibu }}</td>
                           <td>
                             <div class="form-group">
                               <div>
@@ -400,7 +399,6 @@ aria-labelledby="favoritesModalLabel">
 
                               </div>
                             </div>
-
 
                           </td>
                         </tr>

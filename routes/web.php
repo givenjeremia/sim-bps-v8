@@ -1,9 +1,16 @@
 <?php
 
-use App\Models\master\PasienBayi;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\master\ObatController;
+use App\Http\Controllers\master\JenisLayananController;
+use App\Http\Controllers\master\KepalaPuskesmasController;
+use App\Http\Controllers\master\KaryawanController;
+use App\Http\Controllers\master\PasienBayiController;
+use App\Http\Controllers\master\SuamiPasienDewasaController;
+use App\Http\Controllers\master\PasienDewasaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +28,28 @@ Route::get('/', function () {
 });
 
 // Bayi
-Route::resource('/pasien_bayi', PasienBayi::class);
+Route::resource('/pasien-bayi', PasienBayiController::class);
+// Dewasa
+Route::resource('/pasien-dewasa', PasienDewasaController::class);
+Route::get('/pasien-dewasa/cetak-kartu/{id}', [PasienDewasaController::class,'cetakKartu'])->name('pasien-dewasa.cetak.kartu'); 
+
+// Suami Pasien Dewasa
+Route::resource('/suami-pasien-dewasa', SuamiPasienDewasaController::class);
+// Obat
+Route::resource('/obat', ObatController::class);
+// Kepala Puskesmas
+Route::resource('/kepala-puskesmas', KepalaPuskesmasController::class);
+// Layanan
+Route::resource('/jenis-layanan', JenisLayananController::class);
+
+// Karyawan
+Route::resource('/karyawan', KaryawanController::class);
+
+
+
+
+
+
 
 Auth::routes();
 
