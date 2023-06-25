@@ -15,7 +15,7 @@
   \******************************/
 /***/ (() => {
 
-eval("$('#btntest1').on('click', function () {\n  alert(\"hahhaha change\");\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvdGVzdC5qcy5qcyIsIm5hbWVzIjpbIiQiLCJvbiIsImFsZXJ0Il0sInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvdGVzdC5qcz8zNjhjIl0sInNvdXJjZXNDb250ZW50IjpbIlxuJCgnI2J0bnRlc3QxJykub24oJ2NsaWNrJywgZnVuY3Rpb24oKSB7XG4gICAgYWxlcnQoXCJoYWhoYWhhIGNoYW5nZVwiKVxuXG59KTtcbiJdLCJtYXBwaW5ncyI6IkFBQ0FBLENBQUMsQ0FBQyxXQUFXLENBQUMsQ0FBQ0MsRUFBRSxDQUFDLE9BQU8sRUFBRSxZQUFXO0VBQ2xDQyxLQUFLLENBQUMsZ0JBQWdCLENBQUM7QUFFM0IsQ0FBQyxDQUFDIn0=\n//# sourceURL=webpack-internal:///./resources/js/test.js\n");
+eval("$('#btntest1').on('click', function () {\n  alert(\"hahhaha change\");\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyIkIiwib24iLCJhbGVydCJdLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvdGVzdC5qcz8zNjhjIl0sInNvdXJjZXNDb250ZW50IjpbIlxuJCgnI2J0bnRlc3QxJykub24oJ2NsaWNrJywgZnVuY3Rpb24oKSB7XG4gICAgYWxlcnQoXCJoYWhoYWhhIGNoYW5nZVwiKVxuXG59KTtcbiJdLCJtYXBwaW5ncyI6IkFBQ0FBLENBQUMsQ0FBQyxXQUFXLENBQUMsQ0FBQ0MsRUFBRSxDQUFDLE9BQU8sRUFBRSxZQUFXO0VBQ2xDQyxLQUFLLENBQUMsZ0JBQWdCLENBQUM7QUFFM0IsQ0FBQyxDQUFDIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL3Rlc3QuanMuanMiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/test.js\n");
 
 /***/ })
 

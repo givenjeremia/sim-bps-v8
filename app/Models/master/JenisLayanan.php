@@ -2,6 +2,7 @@
 
 namespace App\Models\master;
 
+use App\Models\master\Obat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,8 +11,12 @@ class JenisLayanan extends Model
 {
     use HasFactory;
     protected $table = 'layanan';
+
+    public function obat(){
+        return $this->belongsToMany(Obat::class,'obat_layanan','id_layanan','id_obat')->withPivot('qty','subtotal');
+    }
     
-    protected function validator(array $data, $desire)
+    public function validator(array $data, $desire)
     {
         if($desire=='tambah')
         {

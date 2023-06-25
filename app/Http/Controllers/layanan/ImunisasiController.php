@@ -15,6 +15,7 @@ class ImunisasiController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**

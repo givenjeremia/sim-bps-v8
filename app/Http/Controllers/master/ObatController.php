@@ -59,7 +59,7 @@ class ObatController extends Controller {
             return redirect()->back()->with( 'message', 'Data Obat berhasil disimpan.' );
         } catch ( \Throwable $th ) {
             //throw $th;
-            // dd( $th );
+            dd( $th );
             return redirect()->back()->with( 'message', 'Data Obat gagal ditambahkan.'.$th );
 
         }

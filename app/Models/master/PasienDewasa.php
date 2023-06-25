@@ -19,9 +19,9 @@ class PasienDewasa extends Model
     public static function generateNoRegister()
     {
         $current_time = str_replace('-', '',Carbon::now()->toDateString());
-        $get = static::where('no_regis', 'LIKE', 'PB'.$current_time.'%')->max(DB::raw('CAST(SUBSTRING(no_regis, -3) AS UNSIGNED)')) + 1;
+        $get = static::where('no_regis', 'LIKE', 'PD'.$current_time.'%')->max(DB::raw('CAST(SUBSTRING(no_regis, -3) AS UNSIGNED)')) + 1;
         // $no_nota_generator_penjualan = 
-        return 'PB'.$current_time.str_pad($get, 3, "0", STR_PAD_LEFT);
+        return 'PD'.$current_time.str_pad($get, 3, "0", STR_PAD_LEFT);
     }
 
 

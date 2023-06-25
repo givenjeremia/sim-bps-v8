@@ -22,7 +22,8 @@
       </div> 
       <div class="modal-body"> 
         Apakah anda yakin ingin menghapus jenis layanan <span style="font-weight:bold;" id="lblNamaHapus"></span> ?
-        <FORM method="post" action="<?php echo URL::to('/jenis_pelayanan_hapus')?>">
+        <FORM method="post" id="FormDelete">
+          @method('delete')
           <div class="button-group">
             <BR>
               <button class="btn btn-default pull-left" data-dismiss="modal">Batal</button>&nbsp
@@ -99,7 +100,7 @@
         <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <FORM method="post" name="formTambah" action="<?php echo URL::to('/jenis_pelayanan_tambah')?>">
+        <FORM method="post" name="formTambah" action="{{ route('jenis-layanan.store') }}">
           <div class="form-group">
             <label>Pelayanan:</label>
             <select class="form-control" id="txtPelayanan" name="txtPelayanan" >
@@ -173,7 +174,8 @@
         <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <FORM method="post" name="formEdit" action="<?php echo URL::to('/jenis_pelayanan_edit')?>">
+        <FORM method="post" name="formEdit" id="FormEdit">
+          @method('put')
           <div class="form-group">
             <label>Pelayanan:</label>
             <select class="form-control" id="txtPelayananEdit" name="txtPelayananEdit" disabled>
@@ -315,7 +317,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                   @foreach($layananArr as $key => $value) 
+                   @foreach($layanan as $key => $value) 
                    <tr>
                     <!-- <td style="text-align: center;"><input type="checkbox" class="flat-red icheckbox" name="cbxHapusTerpilih" id="{{$value['id']}}"></td> -->
                     <td style="text-align: center;">{{($key+1)}}</td>
@@ -494,6 +496,7 @@
       var counterEdit = 1;
       var idTerpilihEdit = new Array();
       function load_tabel_edit(arr){
+        
         counterEdit = 1;
         idTerpilihEdit = new Array();
         var table = document.getElementById("tabelDataObatEdit");
@@ -595,6 +598,9 @@
 
       function openhapusmodal(id, nama)
       {
+        let action = "{{ route('jenis-layanan.destroy', ':id') }}".replace(':id', id)
+        $('#FormDelete').attr('action',action)
+
         document.getElementById('txtIdHapus').value = id;
         document.getElementById('lblNamaHapus').innerHTML  = nama;
       }
@@ -619,11 +625,13 @@
 
       function openeditmodal(id, desire)
       {
-        var url = <?php echo "'".URL::to('/detail_jenis_layanan')."'"; ?>;
+        let action = "{{ route('jenis-layanan.update', ':id') }}".replace(':id', id)
+        $('#FormEdit').attr('action',action)
+        let url = "{{ route('jenis-layanan.show',':id') }}".replace(':id', id)
         $.ajax({
           type:"GET",
           url:url,
-          data:{layanan_id:id},
+        
           success:function(data){
             var resp = $.parseJSON(data);
             if(desire == 'edit')
