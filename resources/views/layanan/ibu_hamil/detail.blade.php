@@ -193,7 +193,7 @@ aria-labelledby="favoritesModalLabel">
         <div class="card-body">
           <div class="row">
             <div class="col-lg-3 col-4" title="Tambah">
-              <a href="{{ url('/layanan-ibu-hamil-tambah-history-hamil?no_registrasi='.$pasien[0]['no_regis']) }}" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah Histori Kehamilan</a>
+              <a href="{{ url('/layanan-ibu-hamil/detail-tambah/'.$pasien[0]['no_regis']) }}" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah Histori Kehamilan</a>
             </div>
             <div class="col-lg-3 col-4" title="Tambah">
               <a href="#" class="btn btn-block btn-primary btn-sm" id="btnAdd" data-toggle="modal" 

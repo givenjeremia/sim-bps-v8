@@ -73,12 +73,6 @@
             <div class="row">
               <div class="col-md-6"> 
                 <div class="form-group">
-                  <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
-                  <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                    : &nbsp <span> {{$bayiArr[0]['no_registrasi']}}</span>
-                  </label>
-                </div>
-                <div class="form-group">
                   <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                   <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
                     : &nbsp <span> {{$bayiArr[0]['nama']}}</span>
@@ -148,7 +142,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-2 col-4" title="Tambah">
-              <a href="<?php echo URL::to('/bayi_imunisasi_edit/'.$bayiArr[0]['id'])?>" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah History</a>
+              <a href="<?php echo URL::to('/layanan-imunisasi/'.$bayiArr[0]['id'].'/edit')?>" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah History</a>
             </div>
 
             <div class="col-lg-3 col-4">
@@ -193,6 +187,9 @@
                      </tr>
                     </thead>
                     <tbody>
+                      @php
+                          dd($history);
+                      @endphp
                     @foreach($history as $key => $value) 
                     <tr>
                       <td style="text-align: center;">{{($key+1)}}</td>

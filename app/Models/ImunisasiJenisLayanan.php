@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Models\layanan;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Imunisasi extends Model
+class ImunisasiJenisLayanan extends Model
 {
     use HasFactory;
-    protected $table = 'layanan_imunisasi';
+    protected $table = 'imunisasi_jenis_layanan';
     public $timestamps = false;
-
-  
-
 }

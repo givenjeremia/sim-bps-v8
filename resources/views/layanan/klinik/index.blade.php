@@ -82,9 +82,9 @@ transform: translateY(5px);
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 3%; text-align:center;">
                               No
                             </th>
-                            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 10%; text-align:center;">
-                              Nomor Registrasi
-                            </th>
+                            {{-- <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 10%; text-align:center;">
+                              Jenis Pasien
+                            </th> --}}
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama
                             </th>
@@ -106,7 +106,7 @@ transform: translateY(5px);
                         @foreach($pasien as $key => $value) 
                         <tr>
                           <td style="text-align: center;">{{($key+1)}}</td>
-                          <td style="text-align: center;">{{($value['no_regis_pasien_dewasa'])}}</td>
+                          {{-- <td style="text-align: center;">{{ is_int($value['no_regis']) ==1 ? 'Bayi' : 'Dewasa'}}</td> --}}
                           <td>{{$value['nama']}}</td>
                           <td style="text-align:center;">{{date("d-m-Y",strtotime($value['tanggal_lahir']))}}</td>
                           <td>{{$value['alamat']}}</td>
@@ -114,7 +114,7 @@ transform: translateY(5px);
                           <td>
                             <div class="form-group">
                               <div  title="Detail"  style="width:30%">
-                                <a href="{{ route('layanan-klinik.show',$value['no_regis_pasien_dewasa']) }}" class="btn btn-info"><i class="fa fa-history"></i></a>
+                                <a href="{{ route('layanan-klinik.show',$value['no_regis']) }}" class="btn btn-info"><i class="fa fa-history"></i></a>
                               </div>
                             </div>
                           </td>

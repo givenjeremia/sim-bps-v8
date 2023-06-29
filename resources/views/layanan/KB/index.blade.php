@@ -50,7 +50,7 @@ transform: translateY(5px);
         <div class="card-body">
           <div class="row">
             <div class="col-lg-2 col-4" title="Tambah">
-              <a href="<?php echo URL::to('/kbTambah')?>" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah Pasien Baru</a>
+              <a href="{{ route('layanan-kb.create') }}" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah Pasien Baru</a>
             </div>
           </div>
         </div>
@@ -90,19 +90,20 @@ transform: translateY(5px);
                    </thead>
                    <tbody>
                     @foreach($layanankbArr as $key => $value) 
+              
                     <tr>
                       <td style="text-align: center;">{{($key+1)}}</td>
-                      <td>{{$value['no_registrasi']}}</td>
+                      <td>{{$value['no_regis']}}</td>
                       <td>{{$value['nama']}}</td>
                       <td>{{date("d-m-Y", strtotime($value['tanggal_lahir']))}}</td>
-                      <td>{{$value['alamat']}}</td>
+                      <td>{{$value['alamat'] }} </td>
                       <td>
                         <div class="form-group">
                           <div>
-                            <?php if($value['jumlah_kb'] > 0) { ?>
-                                <a href="<?php echo URL::to('/kbHistoryKb/'.$value["no_registrasi"]); ?>" class="btn btn-info" title="History KB"><i class="fa fa-history"></i></a>
+                            <?php if(count($value->kb) > 0) { ?>
+                                <a href="{{ url('/layanan-kb/'.$value['no_regis']) }}" class="btn btn-info" title="History KB"><i class="fa fa-history"></i></a>
                             <?php } else { ?>
-                                <a href="<?php echo URL::to('/kbBuatKartu/'.$value["id"]); ?>" class="btn btn-primary" title="Buat Kartu"><i class="fa fa-plus-square"></i></a>
+                                <a href="{{ url('/layanan-kb/buat-kartu/'.$value["no_regis"]) }}" class="btn btn-primary" title="Buat Kartu"><i class="fa fa-plus-square"></i></a>
                             <?php } ?>
                           </div>
                         </div>

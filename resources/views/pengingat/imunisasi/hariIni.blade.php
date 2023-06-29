@@ -246,14 +246,20 @@ aria-labelledby="favoritesModalLabel">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 3%; text-align:center;">
                               No
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
+                            {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nomor Registrasi
-                            </th>
+                            </th> --}}
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%; text-align:center;">
                               Jenis Imunisasi
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
+                              Tanggal
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
+                              Nama Ibu
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama Ayah
@@ -270,17 +276,19 @@ aria-labelledby="favoritesModalLabel">
                         @foreach($bayi as $key => $value) 
                         <tr>
                           <td style="text-align: center;">{{($key+1)}}</td>
-                          <td>{{$value->no_registrasi}}</td>
+    
                           <td>{{$value->nama}}</td>
                           <td>{{$value->jenisImunisasi}}</td>
+                          <td>{{$value->tanggal}}</td>
+                          <td>{{$value->nama_ibu}}</td>
                           <td>{{$value->nama_ayah}}</td>
                           <td>{{$value->telp}}</td>
                           <td>
                             <div class="form-group">
                               <div>
-                                <button class="btn btn-info" data-toggle="tooltips" title="Pasien hadir" style="width:40px" onclick="keTambahHistory(<?php echo "'".$value->tanggal."'" ?>,<?php echo "'".$value->idLayanan."'" ?>,<?php echo "'".$value->no_registrasi."'" ?>);"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-info" data-toggle="tooltips" title="Pasien hadir" style="width:40px" onclick="keTambahHistory(<?php echo "'".$value->tanggal."'" ?>,<?php echo "'".$value->idLayanan."'" ?>,<?php echo "'".$value->id."'" ?>);"><i class="fa fa-check"></i></button>
 
-                                <a href="{{url('/bayi_imunisasi_edit/'.$value->idbayi)}}"><button id="<?php echo 'edit'.$key; ?>" class="btn btn-primary" data-toggle="tooltips" title="Jadwalkan Ulang" style="width:40px"><i class="fa fa-clock-o"></i></button></a>
+                                <a href="{{url('/layanan-imunisasi/'.$value->idbayi.'/edit')}}"><button id="<?php echo 'edit'.$key; ?>" class="btn btn-primary" data-toggle="tooltips" title="Jadwalkan Ulang" style="width:40px"><i class="fa fa-clock-o"></i></button></a>
                               </div>
                             </div>
 

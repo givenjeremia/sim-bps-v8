@@ -95,20 +95,20 @@
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['no_registrasi']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]['no_regis_pasien_dewasa']}}</span>
                       </label>
                     </div>
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['nama']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->nama}}</span>
                       </label>
                     </div>
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Tanggal Lahir</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
                         <div class="input-group">
-                          : &nbsp; <span> {{date('d-m-Y', strtotime($layanankbArr[0]['tanggal_lahir']))}}</span>
+                          : &nbsp; <span> {{date('d-m-Y', strtotime($layanankbArr[0]->pasienDewasa->tanggal_lahir))}}</span>
                         </div> 
                       </label>
                     </div>
@@ -118,19 +118,19 @@
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Agama</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{ucfirst($layanankbArr[0]['agama'])}}</span>
+                        : &nbsp; <span> {{ucfirst($layanankbArr[0]->pasienDewasa->agama)}}</span>
                       </label>
                     </div>
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Alamat</label>
                       <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['alamat']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->alamat}}</span>
                       </label>
                     </div>
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">No. Telp</label>
                       <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['telp']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->telp}}</span>
                       </label>
                     </div>                                                           
                   </div>
@@ -339,7 +339,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-2 col-4" title="Tambah">
-              <a href="<?php echo URL::to('/indexTambahHistoryKb/'.$layanankbArr[0]["id_kb"])?>" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah History</a>
+              <a href="{{ url('layanan-kb/tambah-history-kb/'.$layanankbArr[0]->id)  }}" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah History</a>
             </div>
 
             <div class="col-lg-3 col-4">

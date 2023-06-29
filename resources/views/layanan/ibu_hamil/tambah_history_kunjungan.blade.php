@@ -69,7 +69,7 @@ transform: translateY(5px);
   <div class="row">
     <div class="col-12">
       <!-- Custom Tabs -->
-      <form method="post" action="{{url('/tambahKunjunganIbuHamil')}}">
+      <form method="post" action="{{url('/layanan-ibu-hamil-tambah-kunjungan-ibu-hamil')}}">
 
         <input type="hidden" name="obatnya" id="obatnya">
         <input type="hidden" name="harga_layanannya" value="{{$layanan[0]->str_tarif_layanan}}">

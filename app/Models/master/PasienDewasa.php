@@ -2,6 +2,7 @@
 
 namespace App\Models\master;
 
+use App\Models\layanan\Kb;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,11 @@ class PasienDewasa extends Model
 
     public function suamiPasienDewasa(){
         return $this->hasMany(SuamiPasienDewasa::class, 'no_regis_pasien_dewasa','no_regis');
+        
+    }
+
+    public function kb(){
+        return $this->hasMany(Kb::class, 'no_regis_pasien_dewasa','no_regis');
         
     }
 

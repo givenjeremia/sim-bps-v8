@@ -69,7 +69,7 @@ transform: translateY(5px);
         </button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/klinik_tambah_pasien_bayi_history')?>"> 
+        <FORM method="post" action="{{ route('klinik.tambah.pasien.bayi.history') }}"> 
           <div class="form-group"> 
             <span id="pesan_error2" style="display: none;"></span>
             <span id="pesan_konfirmasi2" style="display: none;">Apakah anda yakin ingin menyimpan data history yang bernilai <strong><span id="totalnya2"></span></strong> ?</span>
@@ -880,7 +880,7 @@ transform: translateY(5px);
       $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         type:"POST",
-        url:"{{URL::to('/klinik_cek_stok_obat')}}",
+        url:"{{ route('klinik.cek.stok.obat') }}",
         data:{ obatnya:dataObatTerpakai },
         success:function(data){
 

@@ -283,7 +283,7 @@
   }
 
   function opendeletemodal(id, nama){
-    let action = "{{ route('karyawan.destroy', ':id') }}".replace(':id', id)
+    let action = "{{ route('kepala-puskesmas.destroy', ':id') }}".replace(':id', id)
     $('#FormDeleteSingle').attr('action', action);
     modalHapus.style.display = "block";
 
@@ -292,7 +292,7 @@
   }
 
   function opendeleteallmodal(){
-    let action = "{{ route('karyawan.destroy', ':id') }}".replace(':id', id)
+    let action = "{{ route('kepala-puskesmas.destroy', ':id') }}".replace(':id', 1)
     $('#FormDeleteAll').attr('action', action);
     modalHapusSemua.style.display = "block";
 

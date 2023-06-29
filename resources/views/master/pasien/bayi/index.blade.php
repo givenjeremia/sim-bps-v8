@@ -68,7 +68,8 @@ aria-labelledby="favoritesModalLabel">
       <span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
-      <FORM method="post" action="<?php echo URL::to('/pasien_bayi_edit')?>">
+      <FORM method="post" id="FormEditBayi">
+        @method('put')
         <div class="form-group">
           <label>Nama:</label>
           <input type="text" class="form-control" id="txtNamaEdit" name="txtNamaEdit" placeholder="Nama Layanan" autocomplete="off" required>
@@ -129,7 +130,8 @@ aria-labelledby="favoritesModalLabel">
       </div> 
       <div class="modal-body"> 
         Apakah anda yakin ingin menghapus pasien <span style="font-weight:bold;" id="lblNamaHapus"></span> ?
-        <FORM method="post" action="<?php echo URL::to('/pasien_bayi_hapus')?>">
+        <FORM method="post" id="FormDeleteSingle">
+          @method('delete')
           <div class="button-group">
             <BR>
               <button class="btn btn-default pull-left" data-dismiss="modal">Batal</button>&nbsp
@@ -157,7 +159,9 @@ aria-labelledby="favoritesModalLabel">
         </div> 
         <div class="modal-body"> 
           Apakah anda yakin ingin menghapus pasien yang terpilih?
-          <FORM method="post" action="<?php echo URL::to('/pasien_bayi_hapus_terpilih')?>">
+          <FORM method="post" id="FormDeleteAll">
+            @method('delete')
+            <input type="hidden" name="jenis_hapus" value="all">
             <div class="button-group">
               <BR>
                 <button class="btn btn-default pull-left" data-dismiss="modal">Batal</button>&nbsp
@@ -207,7 +211,7 @@ aria-labelledby="favoritesModalLabel">
           <span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <FORM method="post" action="<?php echo URL::to('/pasien_bayi')?>">
+          <FORM method="post" action="{{ route('pasien-bayi.store') }}">
             <div class="form-group">
               <label>Nama:</label>
               <input type="text" class="form-control" id="txtNama" name="txtNama" placeholder="Nama Pasien" autocomplete="off" required>
@@ -352,9 +356,9 @@ aria-labelledby="favoritesModalLabel">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 3%; text-align:center;">
                               No
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%; text-align:center;">
+                            {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%; text-align:center;">
                               No.Registerasi
-                            </th>
+                            </th> --}}
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama
                             </th>
@@ -378,9 +382,9 @@ aria-labelledby="favoritesModalLabel">
                        <tbody>
                         @foreach($pasienBayi as $key => $value) 
                         <tr>
-                          <td style="text-align: center;"><input type="checkbox" class="flat-red icheckbox" name="cbxHapusTerpilih" id="{{$value->no_regis}}"></td>
+                          <td style="text-align: center;"><input type="checkbox" class="flat-red icheckbox" name="cbxHapusTerpilih" id="{{$value->id}}"></td>
                           <td style="text-align: center;">{{($key+1)}}</td>
-                          <td>{{$value->no_regis}}</td>
+                          {{-- <td>{{$value->no_regis}}</td> --}}
                           <td>{{$value->nama}}</td>
                           <td>{{ $value->kelamin=='P' ? 'Perempuan' : 'Laki-Laki' }}</td>
                           <td style="text-align:center;">{{ date("d-m-Y", strtotime($value->tanggal_lahir)) }}</td>
@@ -389,13 +393,13 @@ aria-labelledby="favoritesModalLabel">
                           <td>
                             <div class="form-group">
                               <div>
-                                <button data-toggle="modal" data-target="#modalDetail" id="<?php echo 'edit'.$key; ?>" onclick="opendetailmodal(<?php echo "'".$value['id']."'" ?>,'detail');" class="btn btn-info" data-toggle="tooltips" title="Edit" style="width:40px"><i class="fa fa-info"></i></button>
+                                <button data-toggle="modal" data-target="#modalDetail" id="<?php echo 'edit'.$key; ?>" onclick="opendetailmodal({{ $value->id }},'detail')" class="btn btn-info" data-toggle="tooltips" title="Edit" style="width:40px"><i class="fa fa-info"></i></button>
 
-                                <button data-toggle="modal" data-target="#modalEdit" id="<?php echo 'edit'.$key; ?>" onclick="opendetailmodal(<?php echo "'".$value['id']."'" ?>,'edit');" class="btn btn-primary" data-toggle="tooltips" title="Edit" style="width:40px"><i class="fa fa-edit"></i></button>
+                                <button data-toggle="modal" data-target="#modalEdit" id="<?php echo 'edit'.$key; ?>" onclick="opendetailmodal({{ $value->id }},'edit');" class="btn btn-primary" data-toggle="tooltips" title="Edit" style="width:40px"><i class="fa fa-edit"></i></button>
 
-                                <a href="{{url('/cetak_kartu_bayi/'.$value['id'])}}"><button type="button" class="btn btn-warning" title="tambah kartu"><i class="fa fa-print"></i></button></a>
+                                <a href="{{url('/pasien-bayi/cetak-kartu/'.$value['id'])}}"><button type="button" class="btn btn-warning" title="tambah kartu"><i class="fa fa-print"></i></button></a>
 
-                                <button data-toggle="modal" data-target="#modalHapus" id="<?php echo 'edit'.$key; ?>" onclick="openhapusmodal(<?php echo "'".$value['id']."'" ?>,<?php echo "'".$value['nama']."'" ?>);" class="btn btn-danger" data-toggle="tooltips" title="Hapus" style="width:40px"><i class="fa fa-times"></i></button>
+                                <button data-toggle="modal" data-target="#modalHapus" id="<?php echo 'edit'.$key; ?>" onclick="openhapusmodal({{ $value['id'] }},'{{ $value['nama']}}')" class="btn btn-danger" data-toggle="tooltips" title="Hapus" style="width:40px"><i class="fa fa-times"></i></button>
 
                               </div>
                             </div>
@@ -482,11 +486,11 @@ aria-labelledby="favoritesModalLabel">
 
         function opendetailmodal(id, desire)
         {
-          var url = <?php echo "'".URL::to('/detail_pasien_bayi')."'"; ?>;
+          var url = "/pasien-bayi/"+id;
           $.ajax({
             type:"GET",
             url:url,
-            data:{bayi_id:id},
+            // data:{bayi_id:id},
             success:function(data){
               var resp = $.parseJSON(data);
               console.log(resp);
@@ -513,6 +517,8 @@ aria-labelledby="favoritesModalLabel">
               }
               else if(desire == 'edit')
               {
+                let action = "{{ route('pasien-bayi.update', ':id') }}".replace(':id', resp.id)
+                $('#FormEditBayi').attr('action',action)
                 document.getElementById('txtIdEdit').value = resp.id;
                 document.getElementById('cbxKelaminEdit').value = resp.kelamin;
                 document.getElementById('txtNamaEdit').value = resp.nama;
@@ -534,6 +540,8 @@ aria-labelledby="favoritesModalLabel">
         {
           document.getElementById('txtIdHapus').value = id;
           document.getElementById('lblNamaHapus').innerHTML  = nama;
+          let action = "{{ route('pasien-bayi.destroy', ':id') }}".replace(':id', id)
+          $('#FormDeleteSingle').attr('action',action)
         }
 
         function openhapusterpilihmodal()
@@ -545,6 +553,8 @@ aria-labelledby="favoritesModalLabel">
           if(arrTerpilih.length>0)
           {
             $('#modalHapusTerpilih').modal('show');
+            let action = "{{ route('pasien-bayi.destroy', ':id') }}".replace(':id', 1)
+            $('#FormDeleteAll').attr('action',action)
             document.getElementById('txtIdHapusTerpilih').value = arrTerpilih;
           }
           else

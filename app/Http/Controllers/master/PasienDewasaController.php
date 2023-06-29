@@ -26,6 +26,7 @@ class PasienDewasaController extends Controller
         //
         $pasien = PasienDewasa::where('status_hapus', 0)->get();
         $noreg = PasienDewasa::generateNoRegister();
+        // dd($pasien); 
         return view('master.pasien.dewasa.index', compact(['pasien', 'noreg']));
     }
 
@@ -180,7 +181,6 @@ class PasienDewasaController extends Controller
             DB::rollback();
             return redirect()->back()->with(['danger_message' => 'Pasien Dewasa Gagal Diubah.']);
         }
-        dd($request->input("txtNamaibuEdit"),);
     }
 
     /**

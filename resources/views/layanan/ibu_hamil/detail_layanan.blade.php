@@ -523,14 +523,14 @@
           <div class="row">
             <div class="col-lg-3 col-4" title="Tambah"> 
               <button type="button" class="btn btn-block btn-primary btn-sm" id="btnAdd"> 
-                <a href="{{url('/layanan-ibu-hamil-tambah-kunjungan-ibu-hamil/'.$layanan[0]->id)}}" style="color: white"> 
+                <a href="{{url('/createKunjunganIbuHamil/'.$layanan[0]->id)}}" style="color: white"> 
                   <i class="fa fa-plus-circle nav-icon"></i> Tambah History Kunjungan 
                 </a> 
               </button> 
             </div>
             <div class="col-lg-3 col-4"  title="Tambah">
               <button type="button" class="btn btn-block btn-primary btn-sm" id="btnAdd">
-                <a href="{{url('/ibuHamilKspr/'.$layanan[0]->id)}}" style="color: white">
+                <a href="{{url('/layanan-ibu-hamil-kspr/'.$layanan[0]->id)}}" style="color: white">
                   <i class="fa fa-plus-circle nav-icon"></i> Tambah History KSPR 
                 </a>
               </button>
@@ -544,7 +544,7 @@
             </div>
             <div class="col-lg-3 col-4"  title="Tambah">
               <button type="button" class="btn btn-block btn-primary btn-sm" id="btnAdd">
-                <a href="{{url('/ibuHamilPenapisan/'.$layanan[0]->id)}}" style="color: white">
+                <a href="{{url('/layanan-ibu-hamil-penapisan/'.$layanan[0]->id)}}" style="color: white">
                   <i class="fa fa-plus-circle nav-icon"></i> Tambah History Penapisan
                 </a>
               </button>

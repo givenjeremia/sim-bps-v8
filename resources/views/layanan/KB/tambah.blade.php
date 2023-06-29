@@ -73,7 +73,7 @@ transform: translateY(5px);
     </div>
   </div>
 
-  <FORM method="POST" id="form_submit" action="{{url('/kbCreate')}}" enctype="multipart/form-data">
+  <FORM method="POST" id="form_submit" action="{{ route('layanan-kb.store') }}" enctype="multipart/form-data">
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
@@ -588,11 +588,11 @@ transform: translateY(5px);
     event.preventDefault();
     var id = document.getElementById('obat_id').value;
     var id_layanan = document.getElementById('cboJenisKB').value;
-    var url = <?php echo "'".URL::to('/cekStokObat')."'"; ?>;
+    var url = "{{ url('/layanan-kb/cekStokObat') }}";
     $.ajax({
-      type:"GET",
+      type:"POST",
       url:url,
-      data:{obat_id:id, 'id_layanan':id_layanan},
+      data:{obat_id:id, 'id_layanan':id_layanan,_token:"{{ csrf_token() }}"},
       success:function(data){
           var resp = $.parseJSON(data);
           console.log(resp);
@@ -617,11 +617,11 @@ transform: translateY(5px);
 
   function changePrice(){
     var id = document.getElementById("cboJenisKB").value;
-    var url = <?php echo "'".URL::to('/getHargaLayanan')."'"; ?>;
+    var url = "{{ url('/layanan-kb/getHargaLayanan') }}";
     $.ajax({
-      type:"GET",
+      type:"POST",
       url:url,
-      data:{layanan_id:id},
+      data:{layanan_id:id,_token:"{{ csrf_token() }}"},
       success:function(data){
           var resp = $.parseJSON(data);
           console.log(resp);

@@ -84,9 +84,10 @@ class KepalaPuskesmasController extends Controller
      * @param  \App\Models\KepalaPuskesmas  $kepalaPuskesmas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, KepalaPuskesmas $kepalaPuskesmas)
+    public function update(Request $request, $kepalaPuskesmas)
     {
         //
+        $kepalaPuskesmas = KepalaPuskesmas::find($kepalaPuskesmas);
         try {
             if($request->statusEdit){
                 KepalaPuskesmas::where('status_aktif', 1)->update(['status_aktif' => 0]);

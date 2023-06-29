@@ -42,7 +42,7 @@ margin-top:5%;
       </div> 
       <div class="modal-body"> 
         Apakah anda yakin ingin merubah jadwal yang terpilih?
-        <FORM method="post" name="formReschedule" action="<?php echo URL::to('/bayi_imunisasi_rescehedule') ?>" >
+        <FORM method="post" name="formReschedule" action="{{ url('/layanan-imunisasi/rechedule') }}" >
           <div class="button-group">
             <BR>
               <button class="btn btn-default pull-left" data-dismiss="modal">Batal</button>&nbsp
@@ -51,7 +51,7 @@ margin-top:5%;
               <input type="hidden" name="_token" value="{!!csrf_token()!!}">
               <input type="hidden" name="txtTanggalRes" id="txtTanggalRes" value="">
               <input type="hidden" name="txtJenisLayananRes" id="txtJenisLayananRes" value="">
-              <input type="hidden" name="txtNoRegRes" id="txtNoReg" value="{{$bayiArr[0]['no_registrasi']}}">
+              <input type="hidden" name="txtNoRegRes" id="txtNoReg" value="{{$bayiArr[0]['id']}}">
             </div>
           </FORM>
         </div> 
@@ -80,12 +80,12 @@ margin-top:5%;
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-6"> 
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                   <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
                     : &nbsp <span> {{$bayiArr[0]['no_registrasi']}}</span>
                   </label>
-                </div>
+                </div> --}}
                 <div class="form-group">
                   <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                   <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
@@ -190,11 +190,11 @@ margin-top:5%;
                                 {
                                   // var_dump((array)$paket);die();  
                                   for($a=0; $a<round(count($paketKiri)/2,0,PHP_ROUND_HALF_UP); $a++) {
-                                  $id_layanan_imunisasi = DB::select("SELECT * FROM layanan_imunisasi WHERE no_registrasi="."'".$bayiArr[0]['no_registrasi']."'");
-                                  $cek1 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$paketKiri[$a]->id." AND id_layanan_imuniasasi=".$id_layanan_imunisasi[0]->id); 
+                                  $id_layanan_imunisasi = DB::select("SELECT * FROM layanan_imunisasi WHERE id_pasien_bayi="."'".$bayiArr[0]['id']."'");
+                                  $cek1 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$paketKiri[$a]->id." AND id_layanan_imunisasi=".$id_layanan_imunisasi[0]->id); 
                                   if($cek1){
                                  ?>
-                                 <FORM method="post" name="formPasienBaru" action="<?php echo URL::to('/bayi_imunisasi_history_tambah') ?>" >
+                                 <FORM method="post" name="formPasienBaru" action="{{ url('/layanan-imunisasi-history') }}" >
                                   <div class="form-group">
                                     <div class="card" >
                                       <div class="card-header" style="background-color:#F5F5F5;">
@@ -211,7 +211,7 @@ margin-top:5%;
                                                 <input id="dtp{{ $paketKiri[$a]->id }}" type="text" class="form-control pull-right datepicker" name="dtpTanggal" autocomplete="off">
                                                 <input type="hidden" name="_token" value="{!!csrf_token()!!}">
                                                 <input type="hidden" name="txtIdLayanan" id="txtIdLayanan" value="{{ $paketKiri[$a]->id }}">
-                                                <input type="hidden" name="txtNoReg" id="txtNoReg" value="{{$bayiArr[0]['no_registrasi']}}">
+                                                <input type="hidden" name="txtId" id="txtNoReg" value="{{$bayiArr[0]['id']}}">
                                                 
                                               </div>
                                             </label>
@@ -242,7 +242,7 @@ margin-top:5%;
                                 {
                                   // var_dump((array)$paket);die();  
                                   for($i=round(count($paketKanan)/2,0,PHP_ROUND_HALF_UP); $i<count($paketKanan); $i++) {
-                                  $cek2 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$paketKanan[$i]->id." AND id_layanan_imuniasasi=".$id_layanan_imunisasi[0]->id);
+                                  $cek2 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$paketKanan[$i]->id." AND id_layanan_imunisasi=".$id_layanan_imunisasi[0]->id);
                                   if($cek2){
                                  ?>
                                  <FORM method="post" name="formPasienBaru" action="<?php echo URL::to('/bayi_imunisasi_history_tambah') ?>" >
@@ -310,7 +310,7 @@ margin-top:5%;
                                 {
                                   // var_dump((array)$paket);die();  
                                   for($c=0; $c<round(count($satuanKiri)/2,0,PHP_ROUND_HALF_UP); $c++) {
-                                  $cek3 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$satuanKiri[$c]->id." AND id_layanan_imuniasasi=".$id_layanan_imunisasi[0]->id);
+                                  $cek3 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$satuanKiri[$c]->id." AND id_layanan_imunisasi=".$id_layanan_imunisasi[0]->id);
                                   if($cek3) {
                                  ?>
                                  <FORM method="post" name="formPasienBaru" action="<?php echo URL::to('/bayi_imunisasi_history_tambah') ?>" >
@@ -361,7 +361,7 @@ margin-top:5%;
                                 {
                                   // var_dump((array)$paket);die();  
                                   for($d=round(count($satuanKanan)/2,0,PHP_ROUND_HALF_UP); $d<count($satuanKanan); $d++) {
-                                  $cek4 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$satuanKanan[$d]->id." AND id_layanan_imuniasasi=".$id_layanan_imunisasi[0]->id);
+                                  $cek4 = DB::select("SELECT * FROM imunisasi_jenis_layanan WHERE id_jenis_layanan=".$satuanKanan[$d]->id." AND id_layanan_imunisasi=".$id_layanan_imunisasi[0]->id);
                                   if($cek4) {
                                  ?>
                                  <FORM method="post" name="formPasienBaru" action="<?php echo URL::to('/bayi_imunisasi_history_tambah') ?>" >
@@ -442,7 +442,7 @@ margin-top:5%;
 
     <?php
     }
-    $layanan_imunisasi = DB::table('layanan_imunisasi')->where('layanan_imunisasi.no_registrasi', '=', $bayiArr[0]["no_registrasi"])->get();
+    $layanan_imunisasi = DB::table('layanan_imunisasi')->where('layanan_imunisasi.id_pasien_bayi', '=', $bayiArr[0]["id"])->get();
     if($layanan_imunisasi[0]->jenis_paket == 2)
     { ?>
       $("#tab_1").removeClass("active");

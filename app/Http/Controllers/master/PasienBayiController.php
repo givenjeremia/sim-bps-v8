@@ -55,10 +55,6 @@ class PasienBayiController extends Controller
         $asal_wilayah = $request->txtAsalWilayah;
         $kelamin = $request->cbxKelamin;
 
-        $created_by = Auth::user()->id;
-        $created_at = Carbon::now();
-        $updated_by = Auth::user()->id;
-        $updated_at = Carbon::now();
         $validation = new PasienBayi();
         $validation = $validation->validator($request->all(), 'tambah');
         if ($validation->fails()) {
@@ -77,21 +73,8 @@ class PasienBayiController extends Controller
             $new->nama_ibu = $nama_ibu;
             $new->telp = $telp;
             $new->status_hapus = 0;
-            $new->created_at = $created_at;
-            $new->created_by = $created_by;
-            $new->updated_at = $updated_at;
-            $new->updated_by = $updated_by;
-            $new->users_id = 4;
+            $new->users_id = Auth::user()->id;
             $new->save();
-
-            $id = $new->id;
-
-            // Update
-            $new->no_registrasi = 'AB' . Carbon::now()->format('Ymd') . $id;
-            $new->updated_at = Carbon::now();
-            $new->updated_by = Auth::user()->id;
-            $new->save();
-
             return redirect()->back()->with('notif_berhasil', 'Pasien Bayi berhasil ditambahkan');
         }
     }
@@ -102,10 +85,14 @@ class PasienBayiController extends Controller
      * @param  \App\Models\PasienBayi  $pasienBayi
      * @return \Illuminate\Http\Response
      */
-    public function show(PasienBayi $pasienBayi)
+    public function show($id)
     {
         //
-        echo json_encode($pasienBayi);
+        // $id_bayi = $request->input('bayi_id');
+        
+        $bayi = PasienBayi::find($id);
+      
+        echo json_encode($bayi);
     }
 
     /**
@@ -132,11 +119,12 @@ class PasienBayiController extends Controller
         $updated_by = Auth::user()->id;
         $updated_at = Carbon::now();
 
-        $validation = $this->validator($request->all(), 'edit');
+        $validation = new PasienBayi();
+        $validation = $validation->validator($request->all(), 'edit');
         if ($validation->fails()) {
             return redirect()->back()->with(['notif_gagal' => 'Data pasien gagal dirubah.']);
         } else {
-            $id = $request->input('txtIdEdit');
+            // $id = $request->input('txtIdEdit');
             $pasienBayi->nama = $request->input('txtNamaEdit');
             $pasienBayi->tanggal_lahir = date("Y-m-d", strtotime($request->input('txtTTLEdit')));
             $pasienBayi->bbl = $request->input('txtBBLEdit');
@@ -147,8 +135,6 @@ class PasienBayiController extends Controller
             $pasienBayi->nama_ayah = $request->input('txtNamaAyahEdit');
             $pasienBayi->nama_ibu = $request->input('txtNamaIbuEdit');
             $pasienBayi->telp = $request->input('txtTelpEdit');
-            $pasienBayi->updated_at = $updated_at;
-            $pasienBayi->updated_by = $updated_by;
             $pasienBayi->save();
 
             return redirect()->back()->with(['notif_berhasil' => 'Data pasien berhasil dirubah.']);
@@ -161,57 +147,36 @@ class PasienBayiController extends Controller
      * @param  \App\Models\PasienBayi  $pasienBayi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PasienBayi $pasienBayi)
+    public function destroy(Request $request, $pasienBayi)
     {
         //
-        $pasienBayi->status_hapus = 1;
-        $pasienBayi->updated_at = Carbon::now();
-        $pasienBayi->updated_by = Auth::user()->id;
-        $pasienBayi->save();
+        try {
+            // dd($request);
+            if ($request->jenis_hapus == 'all') {
+                $id = $request->input('txtIdHapusTerpilih');
+                $arrId = explode(",", $id);
+                foreach ($arrId as $key => $value) {
+                    $pasienBayi = PasienBayi::find($value);
+                    $pasienBayi->status_hapus = 1;
+                    $pasienBayi->updated_at = date("Y-m-d H:i:s");
+                    $pasienBayi->save();
+                }
 
-        return redirect()->back()->with(['notif_berhasil' => 'Data pasien berhasil dihapus.']);
-    }
-
-    public function destroyChecked(Request $request)
-    {   
-        $id = $request->input('txtIdHapusTerpilih');
-        $arrId = explode(',', $id);
-        foreach ($arrId as $key => $value) {
-            $pasienBayi = PasienBayi::find($value);
-            $pasienBayi->status_hapus = 1;
-            $pasienBayi->updated_at = Carbon::now();
-            $pasienBayi->updated_by = Auth::user()->id;
-            $pasienBayi->save();
+                return redirect()->back()->with(['message' => count($arrId).' Pasien Dewasa berhasil dihapus.']);
+            } else {
+                $pasienBayi = PasienBayi::find($pasienBayi);
+                $pasienBayi->status_hapus = 1;
+                $pasienBayi->updated_at = date("Y-m-d H:i:s");
+                $pasienBayi->save();
+                return redirect()->back()->with(['message' => 'Pasien Dewasa Berhasil Dihapus.']);
+            }
+        } catch (\Throwable $e) {
+            return redirect()->back()->with(['danger_message' => 'Pasien Dewasa Gagal Dihapus.']);
         }
 
-        return redirect()->back()->with(['notif_berhasil'=>'Data pasien berhasil dihapus.']);
     }
 
-    public function detail(Request $request)
-    {
-        $id_bayi = $request->input('bayi_id');
-
-        $bayi = PasienBayi::find($id_bayi);
-        $bayiArr = array();
-        foreach ($bayi as $key => $value) {
-            $bayiArr['id'] = $value->id;
-            $bayiArr['nama'] = $value->nama;
-            $bayiArr['kelamin'] = $value->kelamin;
-            $bayiArr['tanggal_lahir'] = date("d-m-Y", strtotime($value->tanggal_lahir));
-            $bayiArr['bbl'] = $value->bbl;
-            $bayiArr['cara_persalinan'] = $value->cara_persalinan;
-            $bayiArr['kelurahan'] = $value->kelurahan;
-            $bayiArr['asal_wilayah'] = $value->asal_wilayah;
-            $bayiArr['alamat'] = $value->alamat;
-            $bayiArr['nama_ayah'] = $value->nama_ayah;
-            $bayiArr['nama_ibu'] = $value->nama_ibu;
-            $bayiArr['telp'] = $value->telp;
-            $bayiArr['status_hapus'] = $value->status_hapus;
-            $bayiArr['no_registrasi'] = $value->no_registrasi;
-        }
-
-        echo json_encode($bayiArr);
-    }
+  
 
     public function exportTemplate()
     {

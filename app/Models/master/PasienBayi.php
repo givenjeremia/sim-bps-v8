@@ -2,6 +2,7 @@
 
 namespace App\Models\master;
 
+use App\Models\layanan\Imunisasi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
@@ -10,8 +11,12 @@ class PasienBayi extends Model
 {
     use HasFactory;
     protected $table = 'pasien_bayi';
+
+    public function imunisasi(){
+        return $this->hasMany(Imunisasi::class,'id_pasien_bayi','id');
+    }
     
-    protected function validator(array $data, $desire)
+    public function validator(array $data, $desire)
     {
         if($desire=='tambah')
         {

@@ -238,14 +238,18 @@ aria-labelledby="favoritesModalLabel">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 3%; text-align:center;">
                               No
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
-                              Nomor Registrasi
-                            </th>
+                         
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%; text-align:center;">
                               Jenis Imunisasi
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
+                              Tanggal
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
+                              Nama Ibu
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                               Nama Ayah
@@ -261,17 +265,20 @@ aria-labelledby="favoritesModalLabel">
                        <tbody>
                         @foreach($bayi as $key => $value) 
                         <tr>
+                         
                           <td style="text-align: center;">{{($key+1)}}</td>
-                          <td>{{$value->no_registrasi}}</td>
                           <td>{{$value->nama}}</td>
                           <td>{{$value->jenisImunisasi}}</td>
+                          <td>{{$value->tanggal}}</td>
+                          <td>{{$value->nama_ibu}}</td>
                           <td>{{$value->nama_ayah}}</td>
                           <td>{{$value->telp}}</td>
                           <td>
                             <div class="form-group">
                               <div>
                               
-                                <a href="{{url('/bayi_imunisasi_edit/'.$value->idbayi)}}"><button id="<?php echo 'edit'.$key; ?>" class="btn btn-primary" data-toggle="tooltips" title="Jadwalkan Ulang" style="width:40px"><i class="fa fa-clock-o"></i></button></a>
+                                <a href="{{url('/layanan-imunisasi/'.$value->idbayi.'/edit')}}"><button id="<?php echo 'edit'.$key; ?>" class="btn btn-primary" data-toggle="tooltips" title="Jadwalkan Ulang" style="width:40px"><i class="fa fa-clock-o"></i></button></a>
+                                <a href="#" onclick="sendWhatapps({{ $value->telp }},'{{ $value->nama }}','{{ $value->tanggal }}')"><button id="<?php echo 'edit'.$key; ?>" class="btn btn-success" data-toggle="tooltips" title="Send Wa" style="width:40px"><i class="fa fa-whatsapp"></i></button></a>
 
                               </div>
                             </div>
@@ -298,6 +305,25 @@ aria-labelledby="favoritesModalLabel">
           <!-- add js -->
           @section('add_js')
           <script>
+            function sendWhatapps(phone,nama_anak,tanggal){
+              let message = 'Selamat Pagi/Siang/Sore/Malam, Mengingatkan Jadwal Imunisasi Ananda '+ nama_anak +' Pada Tanggal '+ tanggal + ' Terimakasih'
+              $.ajax({
+                url: '/send-whatsapp-message',
+                type: 'POST',
+                data: {
+                  recipient_number: '62'+phone, // Recipient's phone number
+                  message: message,
+                  _token:"{{ csrf_token() }}"
+                },
+                success: function (response) {
+                  window.open(response.url, '_blank');
+                },
+                error: function (xhr, status, error) {
+                  console.error(error);
+                }
+              });
+
+            }
             function openeditmodal(id, nama, ttl, bbl, caraPersalinan, alamat, namaAyah, namaIbu, telp)
             {
               document.getElementById('txtIdEdit').value = id;

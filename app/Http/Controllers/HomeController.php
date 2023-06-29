@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -27,11 +28,11 @@ class HomeController extends Controller
     }
     public function hitungPengingat()
     {
-        $hari_ini = DB::select("SELECT pb.id as idbayi,ijl.tanggal, l.nama as jenisImunisasi, pb.no_registrasi, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imuniasasi = li.id AND li.no_registrasi = pb.no_registrasi AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND DATEDIFF(ijl.tanggal,'".date("Y-m-d")."')=0");
+        $hari_ini = DB::select("SELECT pb.id as idbayi,ijl.tanggal, l.nama as jenisImunisasi, pb.id, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imunisasi = li.id AND li.id_pasien_bayi = pb.id AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND DATEDIFF(ijl.tanggal,'".date("Y-m-d")."')=0");
 
-        $terlewati = DB::select("SELECT pb.id as idbayi,ijl.tanggal, l.nama as jenisImunisasi, pb.no_registrasi, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imuniasasi = li.id AND li.no_registrasi = pb.no_registrasi AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND DATEDIFF(ijl.tanggal,'".date("Y-m-d")."')<0");
+        $terlewati = DB::select("SELECT pb.id as idbayi,ijl.tanggal, l.nama as jenisImunisasi,  pb.id, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imunisasi = li.id AND li.id_pasien_bayi = pb.id AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND DATEDIFF(ijl.tanggal,'".date("Y-m-d")."')<0");
 
-        $akan_datang = DB::select("SELECT pb.id as idbayi, ijl.tanggal, l.nama as jenisImunisasi, pb.no_registrasi, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imuniasasi = li.id AND li.no_registrasi = pb.no_registrasi AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND (ijl.tanggal BETWEEN '".date("Y-m-d")."' AND '".date('Y-m-d', strtotime(date("Y-m-d"). ' +3 day'))."')");
+        $akan_datang = DB::select("SELECT pb.id as idbayi, ijl.tanggal, l.nama as jenisImunisasi,  pb.id, pb.nama, pb.nama_ayah, pb.nama_ibu, pb.telp FROM imunisasi_jenis_layanan as ijl, layanan_imunisasi as li, pasien_bayi as pb, layanan as l WHERE ijl.id_layanan_imunisasi = li.id AND li.id_pasien_bayi = pb.id AND ijl.id_jenis_layanan = l.id AND ijl.status_imunisasi = 0 AND (ijl.tanggal BETWEEN '".date("Y-m-d")."' AND '".date('Y-m-d', strtotime(date("Y-m-d"). ' +3 day'))."')");
         $expired = DB::select("SELECT * FROM obat o WHERE o.status_hapus=0 AND (o.tanggal_kadaluarsa BETWEEN '".date("Y-m-d")."' AND '".date('Y-m-d', strtotime(date("Y-m-d"). ' +10 day'))."')");
         $stok = DB::select("SELECT * FROM obat o WHERE o.status_hapus=0 AND o.total_pcs<10");
 

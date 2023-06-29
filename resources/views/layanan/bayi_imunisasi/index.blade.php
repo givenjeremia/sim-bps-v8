@@ -168,7 +168,7 @@ aria-labelledby="favoritesModalLabel">
         <div class="card-body">
           <div class="row">
             <div class="col-lg-2 col-4" data-toggle="tooltips" title="Tambah">
-              <a href="{{url('/bayi_imunisasi_tambah')}}"><button type="button" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah pasien baru</button></a>
+              <a href="{{ route('layanan-imunisasi.create') }}"><button type="button" class="btn btn-block btn-primary btn-sm" id="btnAdd"><i class="fa fa-plus-circle nav-icon"></i> Tambah pasien baru</button></a>
             </div>
           </div>
         </div>
@@ -193,9 +193,7 @@ aria-labelledby="favoritesModalLabel">
                         <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 3%; text-align:center;">
                           No
                         </th>
-                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
-                          Nomor Registrasi
-                        </th>
+                   
                         <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 20%; text-align:center;">
                           Nama
                         </th>
@@ -214,26 +212,24 @@ aria-labelledby="favoritesModalLabel">
                     @foreach($bayiArr as $key => $value) 
                     <tr>
                       <td style="text-align: center;">{{($key+1)}}</td>
-                      <td>{{$value['no_registrasi']}}</td>
+      
                       <td>{{$value['nama']}}</td>
                       <td style="text-align:center;">{{date('d-m-Y', strtotime($value['tanggal_lahir']))}}</td>
                       <td>{{$value['alamat']}}</td>
                       
                       <td>
                         <div class="form-group">
-                          <?php $cekKartu = DB::select("SELECT * FROM layanan_imunisasi WHERE no_registrasi="."'".$value['no_registrasi']."'");
-                          if($cekKartu)
-                            { ?>
-                              <div>
-                                <a href="{{url('/bayi_imunisasi_history/'.$value['id'])}}"><button type="button" class="btn btn-info" title="history pasien"><i class="fa fa-history"></i></button></a>
-                              </div>
-                              <?php 
-                            }
-                            else{ ?>
-                              <div>
-                                <a href="{{url('/bayi_imunisasi_tambahKartu/'.$value['id'])}}"><button type="button" class="btn btn-primary" title="tambah kartu"><i class="fa fa-plus"></i></button></a>
-                              </div>
-                              <?php } ?>
+                          {{-- $value->imunisasi --}}
+                          @if (count($value->imunisasi) > 0)
+                          <div>
+                            <a href="{{url('/layanan-imunisasi/'.$value['id'])}}"><button type="button" class="btn btn-info" title="history pasien"><i class="fa fa-history"></i></button></a>
+                          </div>
+                          @else
+                          <div>
+                            <a href="{{url('/layanan-imunisasi/tambah-kartu/'.$value['id'])}}"><button type="button" class="btn btn-primary" title="tambah kartu"><i class="fa fa-plus"></i></button></a>
+                          </div> 
+                          @endif
+                         
 
                           </div>
                         </td>

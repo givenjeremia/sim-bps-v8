@@ -159,7 +159,7 @@ aria-labelledby="favoritesModalLabel">
         </button> 
       </div> 
       <div class="modal-body"> 
-        <FORM method="post" action="<?php echo URL::to('/imunisasi_simpan_history')?>" name="formPasienBaru"> 
+        <FORM method="post" action="{{ url('/layanan-imunisasi-history-store') }}" name="formPasienBaru"> 
           <div class="form-group"> 
             <span id="pesan_error" style="display: none;"></span>
             <span id="pesan_konfirmasi" style="display: none;">Apakah anda yakin ingin menyimpan data history yang bernilai <strong><span id="totalnya"></span></strong> ?</span>
@@ -170,9 +170,9 @@ aria-labelledby="favoritesModalLabel">
             <input type="hidden" name="keluhannya" id="keluhannya" value="">
             <input type="hidden" name="nasehatnya" id="nasehatnya" value="">
             <input type="hidden" name="umurnya" id="umurnya" value="">
-            <input type="hidden" name="idLayananKonf" id="idLayananKonf" value="<?php echo $konfirmasiJadwal[0]['id_layanannya']?>">
-            <input type="hidden" name="tglKonf" id="tglKonf" value="<?php echo $konfirmasiJadwal[0]['tanggalnya']?>">
-            <input type="hidden" name="noregKonf" id="noregKonf" value="<?php echo $konfirmasiJadwal[0]['no_regnya']?>">
+            <input type="hidden" name="idLayananKonf" id="idLayananKonf" value="{{ $konfirmasiJadwal[0]['id_layanannya'] }}">
+            <input type="hidden" name="tglKonf" id="tglKonf" value="{{ $konfirmasiJadwal[0]['tanggalnya'] }}">
+            <input type="hidden" name="noregKonf" id="noregKonf" value="{{ $konfirmasiJadwal[0]['id'] }}">
             <input type="hidden" name="bbnya" id="bbnya" value="">
             <input type="hidden" name="totalAkhirnya" id="totalAkhirnya" value="">
             <input type="hidden" name="obatnya" id="obatnya" value="">
@@ -210,12 +210,12 @@ aria-labelledby="favoritesModalLabel">
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-6"> 
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                   <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
                     : &nbsp <span> {{$bayiArr[0]['no_registrasi']}}</span>
                   </label>
-                </div>
+                </div> --}}
                 <div class="form-group">
                   <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                   <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
@@ -484,7 +484,7 @@ aria-labelledby="favoritesModalLabel">
             </label>
             <div class="col-lg-7">
               <div class="form-group float-sm-left">
-                <button type="submit" name="simpan" class="btn btn-primary" onclick="opensimpanmodal('<?php echo $konfirmasiJadwal[0]['no_regnya']?>')"><i class="fa fa-save nav-icon"></i> Simpan</button>
+                <button type="submit" name="simpan" class="btn btn-primary" onclick="opensimpanmodal('{{ $konfirmasiJadwal[0]['id'] }}')"><i class="fa fa-save nav-icon"></i> Simpan</button>
               </div>
             </div>
 
@@ -665,7 +665,7 @@ function validasi_form(){
       $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         type:"POST",
-        url:"{{URL::to('/imunisasi_cek_stok_obat')}}",
+        url:"{{ url('/layanan-imunisasi/cek-stok-obat') }}",
         data:{ obatnya:dataObatTerpakai },
         success:function(data){
           console.log(validasi_form());

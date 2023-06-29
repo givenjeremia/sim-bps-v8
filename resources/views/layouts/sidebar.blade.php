@@ -65,7 +65,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{Request::segment(1) === 'klinik' || Request::segment(1) === 'ibu_hamil' || Request::segment(1) === 'kb' || Request::segment(1) === 'bayi_imunisasi' ? 'menu-open active': null}}">
+          <li class="nav-item has-treeview {{Request::segment(1) === 'layanan-klinik' || Request::segment(1) === 'layanan-ibu-hamil' || Request::segment(1) === 'layanan-kb' || Request::segment(1) === 'layanan-imunisasi' ? 'menu-open active': null}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-medkit"></i>
               <p>
@@ -75,25 +75,25 @@
             </a>
             <ul class="nav nav-treeview" style="background-color:#282828;">
               <li class="nav-item">
-                <a href="{{url('/klinik')}}" class="{{Request::segment(1) === 'klinik' ? 'active': null}} nav-link">
+                <a href="{{url('/layanan-klinik')}}" class="{{Request::segment(1) === 'layanan-klinik' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Klinik</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/ibu_hamil')}}" class="{{Request::segment(1) === 'ibu_hamil' ? 'active': null}} nav-link">
+                <a href="{{url('/layanan-ibu-hamil')}}" class="{{Request::segment(1) === 'layanan-ibu-hamil' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Ibu Hamil</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/kb')}}" class="{{Request::segment(1) === 'kb' ? 'active': null}} nav-link">
+                <a href="{{url('/layanan-kb')}}" class="{{Request::segment(1) === 'layanan-kb' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>KB</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/bayi_imunisasi')}}" class="{{Request::segment(1) === 'bayi_imunisasi' ? 'active': null}} nav-link">
+                <a href="{{url('/layanan-imunisasi')}}" class="{{Request::segment(1) === 'layanan-imunisasi' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Bayi Imunisasi</p>
                 </a>
@@ -101,7 +101,7 @@
             </ul>
           </li>
 
-          <li class="nav-item has-treeview {{Request::segment(1) === 'pasien_dewasa' || Request::segment(1) === 'pasien_bayi' || Request::segment(1) === 'jenis_pelayanan' || Request::segment(1) === 'obat' || Request::segment(1) === 'kepala_puskesmas' || Request::segment(1) === 'karyawan' ? 'menu-open active': null}}">
+          <li class="nav-item has-treeview {{Request::segment(1) === 'pasien-dewasa' || Request::segment(1) === 'pasien-bayi' || Request::segment(1) === 'jenis-layanan' || Request::segment(1) === 'obat' || Request::segment(1) === 'kepala-puskesmas' || Request::segment(1) === 'karyawan' ? 'menu-open active': null}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-folder-o"></i>
               <p>
@@ -111,19 +111,19 @@
             </a>
             <ul class="nav nav-treeview" style="background-color:#282828;">
               <li class="nav-item">
-                <a href="{{url('/pasien_dewasa')}}" class="{{Request::segment(1) === 'pasien_dewasa' ? 'active': null}} nav-link">
+                <a href="{{url('/pasien-dewasa')}}" class="{{Request::segment(1) === 'pasien-dewasa' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Pasien Dewasa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/pasien_bayi')}}" class="{{Request::segment(1) === 'pasien_bayi' ? 'active': null}} nav-link">
+                <a href="{{url('/pasien-bayi')}}" class="{{Request::segment(1) === 'pasien-bayi' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Pasien Bayi</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/jenis_pelayanan')}}" class="{{Request::segment(1) === 'jenis_pelayanan' ? 'active': null}} nav-link">
+                <a href="{{url('/jenis-layanan')}}" class="{{Request::segment(1) === 'jenis-pelayanan' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Jenis Pelayanan</p>
                 </a>
@@ -135,7 +135,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/kepala_puskesmas')}}" class="{{Request::segment(1) === 'kepala_puskesmas' ? 'active': null}} nav-link">
+                <a href="{{url('/kepala-puskesmas')}}" class="{{Request::segment(1) === 'kepala-puskesmas' ? 'active': null}} nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Kepala Puskesmas</p>
                 </a>

@@ -82,7 +82,7 @@ transform: translateY(5px);
                     <div class="form-group row">
                       <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$pasienArr[0]['no_registrasi']}}</span>
+                        : &nbsp; <span> {{$pasienArr[0]['no_regis']}}</span>
                       </label>
                     </div>
                     <div class="form-group row">
@@ -128,7 +128,7 @@ transform: translateY(5px);
     </div>
   </div>
 
-  <FORM method="POST" action="{{url('/kbCreate')}}" id="form_submit" enctype="multipart/form-data">
+  <FORM method="POST" action="{{ route('layanan-kb.store') }}" id="form_submit" enctype="multipart/form-data">
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
@@ -419,7 +419,7 @@ transform: translateY(5px);
 
                 <div class="form-group">
                   <input type="hidden" name="tipe" id="tipe" value="buat_kartu"></input>
-                  <input type="hidden" name="txtIdPasien" id="txtIdPasien" value="{{$pasienArr[0]['no_registrasi']}}"></input>
+                  <input type="hidden" name="txtIdPasien" id="txtIdPasien" value="{{$pasienArr[0]['no_regis']}}"></input>
                   <input type="hidden" name="txtTotalObat" id="txtTotalObat"></input>
                   <input type="hidden" name="obat_id" id="obat_id"></input>
                   <input type="hidden" name="txtTarifLayanan" id="txtTarifLayanan"></input>
@@ -505,11 +505,11 @@ transform: translateY(5px);
     event.preventDefault();
     var id = document.getElementById('obat_id').value;
     var id_layanan = document.getElementById('cboJenisKB').value;
-    var url = <?php echo "'".URL::to('/cekStokObat')."'"; ?>;
+    var url = '{{ url("/layanan-kb/cekStokObat") }}';
     $.ajax({
-      type:"GET",
+      type:"POST",
       url:url,
-      data:{obat_id:id, id_layanan:id_layanan},
+      data:{obat_id:id, id_layanan:id_layanan,_token:"{{ csrf_token() }}"},
       success:function(data){
           var resp = $.parseJSON(data);
           console.log(resp);
@@ -549,11 +549,11 @@ transform: translateY(5px);
 
   function changePrice(){
     var id = document.getElementById("cboJenisKB").value;
-    var url = <?php echo "'".URL::to('/getHargaLayanan')."'"; ?>;
+    var url = "{{ url('/layanan-kb/getHargaLayanan') }}";
     $.ajax({
-      type:"GET",
+      type:"POST",
       url:url,
-      data:{layanan_id:id},
+      data:{layanan_id:id,_token:'{{ csrf_token() }}'},
       success:function(data){
           var resp = $.parseJSON(data);
           console.log(resp);

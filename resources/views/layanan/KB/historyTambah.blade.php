@@ -83,20 +83,20 @@ transform: translateY(5px);
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">Nomor Registrasi</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['no_registrasi']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]['no_regis_pasien_dewasa']}}</span>
                       </label>
                     </div>
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">Nama Pasien</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['nama']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->nama}}</span>
                       </label>
                     </div>
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">Tanggal Lahir</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
                         <div class="input-group">
-                          : &nbsp; <span> {{date('d-m-Y', strtotime($layanankbArr[0]['tanggal_lahir']))}}</span>
+                          : &nbsp; <span> {{date('d-m-Y', strtotime($layanankbArr[0]->pasienDewasa->tanggal_lahir))}}</span>
                         </div> 
                       </label>
                     </div>
@@ -106,19 +106,19 @@ transform: translateY(5px);
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">Agama</label>
                       <label class="control-label col-sm-4" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['agama']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->agama}}</span>
                       </label>
                     </div>
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">Alamat</label>
                       <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['alamat']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->alamat}}</span>
                       </label>
                     </div>
                     <div class="form-group">
                       <label class="control-label col-sm-4" for="nama">No. Telp</label>
                       <label class="control-label col-sm-6" for="nama" style="font-weight: normal;">
-                        : &nbsp; <span> {{$layanankbArr[0]['telp']}}</span>
+                        : &nbsp; <span> {{$layanankbArr[0]->pasienDewasa->telp}}</span>
                       </label>
                     </div>                                                           
                   </div>
@@ -129,7 +129,7 @@ transform: translateY(5px);
     </div>
   </div>
   
-  <form class="form-horizontal" id="form_submit" method="POST" action="{{url('/kbInsertTambahHistory')}}">
+  <form class="form-horizontal" id="form_submit" method="POST" action="{{url('/layanan-kb/store-tambah-history')}}">
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -325,7 +325,7 @@ transform: translateY(5px);
                   <div class="form-group"> 
                     <label class="control-label col-sm-3"style>1. Harga Layanan :</label> 
                     <label class="control-label col-lg-8" style="font-weight: normal;">
-                      Rp. <span id="harga_layanan">{{$layanankbArr[0]['str_tarif_layanan']}}</span> ,-
+                      Rp. <span id="harga_layanan">{{$layanankbArr[0]->layanan->tarif_layanan}}</span> ,-
                     </label>
                   </div> 
                   <span id="titleObat"></span>
@@ -338,19 +338,22 @@ transform: translateY(5px);
                       Rp. <span id="totalHarga">0</span> ,-
                     </label>
                   </div>
+                  @php
+                      // dd($layanankbArr[0]);
+                  @endphp
                   <div class="form-group">
                     <input type="hidden" name="_token" value="{!!csrf_token()!!}">
                     <input type="hidden" id="txtIdObat" name="txtIdObat">
-                    <input type="hidden" id="txtIdLayanan" name="txtIdLayanan" value="{{$id_layanan}}">
-                    <input type="hidden" id="txtIdKartu" name="txtIdKartu" value="{{$layanankbArr[0]['id_kartu']}}">
+                    <input type="hidden" id="txtIdLayanan" name="txtIdLayanan" value="{{$layanankbArr[0]['id_jenis_layanan']}}">
+                    <input type="hidden" id="txtIdKartu" name="txtIdKartu" value="{{$layanankbArr[0]['id']}}">
                     <input type="hidden" id="txtQtyObat" name="txtQtyObat">
                     <input type="hidden" id="txtGrandtotalObatTambah" name="txtGrandtotalObatTambah">
                     <input type="hidden" name="detectChangeKB" id="detectChangeKB" value="0"></input>
                     <input type="hidden" name="detectUseObat" id="detectUseObat" value="0"></input>
                     <input type="hidden" name="txtTotalObat" id="txtTotalObat"></input>
-                    <input type="hidden" name="txtIdPasien" id="txtIdPasien" value="{{$layanankbArr[0]['id']}}"></input>
+                    <input type="hidden" name="txtIdPasien" id="txtIdPasien" value="{{$layanankbArr[0]['no_regis']}}"></input>
                     <input type="hidden" name="obat_id" id="obat_id"></input>
-                    <input type="hidden" name="txtTarifLayanan" id="txtTarifLayanan" value="{{$layanankbArr[0]['tarif_layanan']}}"></input>
+                    <input type="hidden" name="txtTarifLayanan" id="txtTarifLayanan" value="{{$layanankbArr[0]->layanan->tarif_layanan}}"></input>
                     <input type="hidden" name="txtTarifTotal" id="txtTarifTotal"></input>
                     <button class="btn btn-primary"><i class="fa fa-save nav-icon"></i> Simpan</button>
                   </div>
@@ -363,6 +366,7 @@ transform: translateY(5px);
     </div>
   </form>
 </div>
+
 @endsection
 <!-- plugin js -->
 @section('plugin_js')
@@ -468,17 +472,17 @@ transform: translateY(5px);
       document.getElementById("titleObat").innerHTML = '';
       document.getElementById("list_obat").innerHTML = '';
       document.getElementById('obat_id').value = "";
-      document.getElementById('harga_layanan').innerHTML = (<?php echo $layanankbArr[0]['tarif_layanan'] ?>).toLocaleString();
-      document.getElementById('txtTarifLayanan').value = <?php echo $layanankbArr[0]['tarif_layanan'] ?>;
+      document.getElementById('harga_layanan').innerHTML = (<?php echo $layanankbArr[0]->layanan->tarif_layanan ?>).toLocaleString();
+      document.getElementById('txtTarifLayanan').value = <?php echo $layanankbArr[0]->layanan->tarif_layanan ?>;
       countAllPayment();
     }
     else{
       var id = document.getElementById("cboJenisKB").value;
-      var url = <?php echo "'".URL::to('/getHargaLayanan')."'"; ?>;
+      var url = "{{ url('/layanan-kb/getHargaLayanan') }}";
       $.ajax({
-        type:"GET",
+        type:"POST",
         url:url,
-        data:{layanan_id:id},
+        data:{layanan_id:id,_token:"{{ csrf_token() }}"},
         success:function(data){
             var resp = $.parseJSON(data);
             console.log(resp);
@@ -630,11 +634,11 @@ transform: translateY(5px);
                     alert("Terjadi kesalahan");
                   }
                   else{
-                    var url = <?php echo "'".URL::to('/cekStokObat2')."'"; ?>;
+                    var url = "{{ url('/layanan-kb/cekStokObat2') }}";
                     $.ajax({
-                      type:"GET",
+                      type:"POST",
                       url:url,
-                      data:{txtIdObat:idObat, "txtQtyObat":idQty2},
+                      data:{txtIdObat:idObat, "txtQtyObat":idQty2,_token:"{{ csrf_token() }}"},
                       success:function(data){
                           var resp = $.parseJSON(data);
                           if(resp == true){
@@ -664,11 +668,11 @@ transform: translateY(5px);
                 alert("Terjadi kesalahan");
               }
               else{
-                var url = <?php echo "'".URL::to('/cekStokObat2')."'"; ?>;
+                var url =  "{{ url('/layanan-kb/cekStokObat2') }}";
                 $.ajax({
-                  type:"GET",
+                  type:"POST",
                   url:url,
-                  data:{txtIdObat:idObat, "txtQtyObat":idQty2},
+                  data:{txtIdObat:idObat, "txtQtyObat":idQty2,_token:"{{ csrf_token() }}"},
                   success:function(data){
                       var resp = $.parseJSON(data);
                       if(resp == true){
@@ -721,11 +725,11 @@ transform: translateY(5px);
               alert("Terjadi kesalahan");
             }
             else{
-              var url = <?php echo "'".URL::to('/cekStokObat2')."'"; ?>;
+              var url =  "{{ url('/layanan-kb/cekStokObat2') }}";
               $.ajax({
-                type:"GET",
+                type:"POST",
                 url:url,
-                data:{txtIdObat:idTerpilih, "txtQtyObat":idQty},
+                data:{txtIdObat:idTerpilih, "txtQtyObat":idQty,_token:"{{ csrf_token() }}"},
                 success:function(data){
                     var resp = $.parseJSON(data);
                     if(resp == true){

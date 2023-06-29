@@ -26,9 +26,9 @@ class KlinikController extends Controller
      */
     public function index()
     {
-        $pasienBayi = PasienBayi::select('no_regis_pasien_dewasa', 'nama', 'tanggal_lahir', 'alamat', 'telp')->where('status_hapus', 0);
-        $pasienDewasa = PasienDewasa::select('no_regis', 'nama', 'tanggal_lahir', 'alamat', 'telp')->where('status_hapus', 0);
-        $pasien = $pasienBayi->union($pasienDewasa)->get();
+        $pasienBayi = PasienBayi::select( 'id','nama', 'tanggal_lahir', 'alamat', 'telp')->where('status_hapus', 0);
+        $pasienDewasa = PasienDewasa::select('no_regis','nama', 'tanggal_lahir', 'alamat', 'telp')->where('status_hapus', 0);
+        $pasien = $pasienDewasa->union($pasienBayi)->get();
         return view('layanan.klinik.index', compact('pasien'));
     }
 
@@ -99,11 +99,11 @@ class KlinikController extends Controller
             $pasien = PasienDewasa::where('no_regis',$id)->get();
         }
         else {
-            $pasien = PasienBayi::where('no_regis_pasien_dewasa',$id)->get();
+            $pasien = PasienBayi::where('id',$id)->get();
+            $pasien[0]->no_regis = $pasien[0]->id;
             $pasien[0]->agama = '-';
         }
-        $klinik = Klinik::where('no_regis_pasien_dewasa',$id)->get();
-
+        $klinik = Klinik::where('no_regis',$id)->get();
         return view('layanan.klinik.detail', compact('pasien','klinik'));
     }
 
@@ -175,11 +175,12 @@ class KlinikController extends Controller
             $pasien = PasienDewasa::where('no_regis',$id)->get();
         }
         else {
-            $pasien = PasienBayi::where('no_regis_pasien_dewasa',$id)->get();
+            $pasien = PasienBayi::where('id',$id)->get();
+            $pasien[0]->no_regis = $pasien[0]->id;
             $pasien[0]->agama = '-';
         }
 
-        $klinik = Klinik::where('no_regis_pasien_dewasa',$id)->get();
+        $klinik = Klinik::where('no_regis',$id)->get();
         $obat = Obat::all();
         return view('layanan.klinik.detail_tambah', compact('pasien','klinik','obat'));
     }
@@ -201,7 +202,7 @@ class KlinikController extends Controller
             $new_klinik->keluhan = $request->keluhannya;
             $new_klinik->tindakan = $request->tindakannya;
             $new_klinik->tanggal = date("Y-m-d H:i:s");
-            $new_klinik->no_regis_pasien_dewasa = $request->idSimpan;
+            $new_klinik->no_regis = $request->idSimpan;
             $new_klinik->users_id = $user->id;
             $new_klinik->save();
             $total_harga_obat = 0;
@@ -329,11 +330,8 @@ class KlinikController extends Controller
 
     }
 
-    public function klinik_tambah_pasien_bayi_history(Request $request)
+    public function tambah_pasien_bayi_history(Request $request)
     {
-        $pasien_bayi = DB::table('pasien_bayi')->where('status_hapus', '<>', 1)->orderBy('id', 'desc')->first();
-        $noreg = (!empty($pasien_bayi)) ? 'AB'.date("Ymd").($pasien_bayi->id + 1) : 'OD'.date("Ymd")."1";
-
         $nama = $request->namanya2;
         $tanggal_lahir = $request->tlnya2;
         $agama = $request->agamanya2;
@@ -349,98 +347,70 @@ class KlinikController extends Controller
         DB::beginTransaction();
 
         try {
-            DB::table('pasien_bayi')->insert(
-                [
-                    'nama' => $nama,
-                    'tanggal_lahir' => date("Y-m-d", strtotime($tanggal_lahir)),
-                    'bbl' => 0,
-                    'kelamin' => $kelamin,
-                    'cara_persalinan' => '',
-                    'kelurahan' => $kelurahan,
-                    'asal_wilayah' => $asal_wilayah,
-                    'alamat' => $alamat,
-                    'nama_ayah' => '',
-                    'nama_ibu' => '',
-                    'telp' => $no_telp,
-                    'status_hapus' => 0,
-                    'no_registrasi' => $noreg,
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => date("Y-m-d H:i:s"),
-                    'created_by' => Auth::user()->id,
-                    'updated_by' => Auth::user()->id
-                ]
-            );
-
-            DB::table('layanan_klinik')->insert(
-                [
-                    'tanggal' => date("Y-m-d H:i:s"),
-                    'keluhan' => $request->keluhannya2,
-                    'tindakan' => $request->tindakannya2,
-                    'no_registrasi' => $noreg,
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => date("Y-m-d H:i:s"),
-                    'created_by' => Auth::user()->id,
-                    'updated_by' => Auth::user()->id
-                ]
-            );
-
-            $layanan_klinik_inserted = DB::table('layanan_klinik')->orderBy('id', 'desc')->first();
+            $new_pasien_bayi = new PasienBayi();
+            $new_pasien_bayi->nama = $nama;
+            $new_pasien_bayi->tanggal_lahir = date("Y-m-d", strtotime($tanggal_lahir));
+            $new_pasien_bayi->bbl = 0;
+            $new_pasien_bayi->kelamin = $kelamin;
+            $new_pasien_bayi->cara_persalinan = '';
+            $new_pasien_bayi->kelurahan = $kelurahan;
+            $new_pasien_bayi->asal_wilayah = $asal_wilayah;
+            $new_pasien_bayi->alamat = $alamat;
+            $new_pasien_bayi->nama_ayah = '';
+            $new_pasien_bayi->nama_ibu = '';
+            $new_pasien_bayi->telp = $no_telp;
+            $new_pasien_bayi->status_hapus = 0;
+            $new_pasien_bayi->users_id = Auth::user()->id;
+            $new_pasien_bayi->save();
+            $id_new_pasien_bayi = $new_pasien_bayi->id;
+            
+            // Add Klinik
+            $new_klinik = new Klinik();
+            $new_klinik->tanggal = date("Y-m-d H:i:s");
+            $new_klinik->keluhan = $request->keluhannya2;
+            $new_klinik->tindakan = $request->tindakannya2;
+            $new_klinik->no_regis = $id_new_pasien_bayi;
+            $new_klinik->users_id = Auth::user()->id;
+            $new_klinik->save();
+            $id_new_klinik = $new_klinik->id;
 
             $total_harga_obat = 0;
             if($idObat[0]!=null){
                 foreach ($idObat as $key => $value) {
-                    $obat = DB::table('obat')->where('id', $value)->get();
-                    $ttl_hrg_obt = $obat[0]->harga*(int)$qtyObat[$key];
+                    $obat = Obat::find($value);
+                    $ttl_hrg_obt = $obat->harga*(int)$qtyObat[$key];
+                    $stok_update = $obat->total_pcs-(int)$qtyObat[$key];
 
-                    $stok_update = $obat[0]->total_pcs-(int)$qtyObat[$key];
-
-                    DB::table('obat')->where('id', $value)->update(
-                        [
-                            'total_pcs' => $stok_update,
-                            'updated_by' => Auth::user()->id
-                        ]
-                    );
-
-                    DB::table('klinik_obat')->insert(
-                        [
-                            'id_obat' => $value,
-                            'id_layanan' => $layanan_klinik_inserted->id,
-                            'qty' => $qtyObat[$key],
-                            'harga_obat' => $obat[0]->harga,
-                            'total_harga_obat' => $ttl_hrg_obt
-                        ]
-                    );
+                    $obat->total_pcs = $stok_update;
+                    $obat->save();
+                    
+                    $obat->klinik()->attach($id_new_klinik,['qty' => $qtyObat[$key],'harga_obat' => $obat->harga, 'total_harga_obat'=>$ttl_hrg_obt]);
+                    
                     $total_harga_obat+=$ttl_hrg_obt;
                 }
             }
 
 
             $total_harga = $total_harga_obat+(int)str_replace(',', '', $request->harga_layanannya);
-            DB::table('transaksi')->insert(
-                [
-                    'jenis_layanan' => "KLINIK",
-                    'id_layanan' => $layanan_klinik_inserted->id,
-                    'harga_obat' => $total_harga_obat,
-                    'harga_layanan' => (int)str_replace(',', '', $request->harga_layanannya),
-                    'total_harga' => $total_harga,
-                    'tanggal' => date("Y-m-d H:i:s"),
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => date("Y-m-d H:i:s"),
-                    'created_by' => Auth::user()->id,
-                    'updated_by' => Auth::user()->id
-                ]
-            );
+
+            // Add Transaksi
+            $new_transaksi = new Transaksi();
+            $new_transaksi->jenis_layanan = "KLINIK";
+            $new_transaksi->id_layanan = $id_new_klinik;
+            $new_transaksi->harga_obat = $total_harga_obat;
+            $new_transaksi->harga_layanan = (int)str_replace(',', '', $request->harga_layanannya);
+            $new_transaksi->total_harga = $total_harga;
+            $new_transaksi->tanggal = date("Y-m-d H:i:s");
+            $new_transaksi->users_id = Auth::user()->id;
+            $new_transaksi->save();
 
             DB::commit();
-                // all good
+            return redirect('/layanan-klinik/'.$id_new_pasien_bayi)->with(['message'=>'Data transaksi berhasil disimpan.']);
         } catch (\Exception $e) {
             DB::rollback();
-            // print_r($e->getMessage());
-            // die();
-            return redirect('/klinik')->with(['danger_message'=>'Data transaksi gagal disimpan.']);
-                // something went wrong
-        }
-        return redirect('/klinik/'.$noreg)->with(['message'=>'Data transaksi berhasil disimpan.']);
+            dd($e->getMessage());
+            return redirect('/layanan-klinik')->with(['danger_message'=>'Data transaksi gagal disimpan.']);
+        }  
     }
 
 

@@ -133,11 +133,10 @@ background-color: #4CAF50;
           <h3 class="card-title p-3">Pasien</h3>
         </div><!-- /.card-header -->
         <div class="card-body">
-          <form id="regForm" action="<?php echo URL::to('/ibuHamilTambahHistoryHamil')?>" method="post" enctype="multipart/form-data">
+          <form id="regForm" action="{{ route('tambah.history.hamil') }}" method="post" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="no_reg" value="{{$_GET['no_registrasi']}}">
-            <!-- One "tab" for each step in the form: -->
-
+  
+            <input type="hidden" name="no_reg" value="{{ $pasien[0]->id_ibu }}">
 
             <div class="tab"><b>IDENTITAS IBU :</b>
               <p><input type="text" class="form-control" id="txtNamaibu" name="txtNamaibu" placeholder="Nama..." oninput="this.className = 'form-control'" required></p>
@@ -1656,10 +1655,10 @@ background-color: #4CAF50;
       });
     }
 
-  var currentTab = 0; // Current tab is set to be the first tab (0)
-    showTab(currentTab); // Display the current tab
+  var currentTab = 0; 
+  showTab(currentTab);
 
-    function showTab(n) {
+  function showTab(n) {
       // This function will display the specified tab of the form ...
       var x = document.getElementsByClassName("tab");
       x[n].style.display = "block";
@@ -1676,19 +1675,13 @@ background-color: #4CAF50;
       }
       // ... and run a function that displays the correct step indicator:
       fixStepIndicator(n)
-    }
+  }
 
-    function nextPrev(n) {
-      // This function will figure out which tab to display
-      var x = document.getElementsByClassName("tab");
-      // Exit the function if any field in the current tab is invalid:
-      if (n == 1 && !validateForm()) return false;
-      
-      // if you have reached the end of the form... :
-      
-      if ((x.length - currentTab) == 1) {
+  function nextPrev(n) {
+    var x = document.getElementsByClassName("tab");
+    if (n == 1 && !validateForm()) return false;  
+    if ((x.length - currentTab) == 1) {
         if(n != -1){
-          //...the form gets submitted:
           var id = document.getElementById('list_obat').value;
           var id_layanan = document.getElementById('id_layanan').value;
           
@@ -1719,8 +1712,10 @@ background-color: #4CAF50;
           });
         }
         else{
+     
           // Hide the current tab:
-          x[currentTab].style.display = "none";
+          let data = x[currentTab];
+          data.style.display = "none";
           // Increase or decrease the current tab by 1:
           currentTab = currentTab + n;
 
@@ -1728,14 +1723,16 @@ background-color: #4CAF50;
       }
       else{
         // Hide the current tab:
-        x[currentTab].style.display = "none";
+        let data = x[currentTab];
+        data.style.display = "none";
         // Increase or decrease the current tab by 1:
         currentTab = currentTab + n;
       }
       
       // Otherwise, display the correct tab:
       showTab(currentTab);
-    }
+    
+  }
 
     function validateForm() {
       // This function deals with validation of the form fields
@@ -2078,12 +2075,12 @@ background-color: #4CAF50;
       }
       //otw ke tab 3
       if(currentTab==2){
-        var no_reg= "<?php echo $_GET['no_registrasi']?>";
+        var no_reg= "{{ $pasien[0]->id_ibu }}";
         disableScreen();
         $.ajax({
           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
           type:"POST",
-          url:"{{URL::to('/get_riwayat_hamil')}}",
+          url:"{{ url('/layanan-ibu-hamil/get-riwayat-hamil') }}",
           data:{ no_registrasi:no_reg },
           success:function(data){
             //console.log(data);
@@ -2419,13 +2416,12 @@ background-color: #4CAF50;
     var hamil_sekarang = 0;
 
     function get_history_hamil(){
-      //alert("{{$_GET['no_registrasi']}}");
-      var no_reg = "{{$_GET['no_registrasi']}}";
+      var no_reg = "{{ $pasien[0]->id_ibu }}";
       disableScreen();
       $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         type:"POST",
-        url:"{{URL::to('/get_riwayat_hamil')}}",
+        url:"{{ url('/layanan-ibu-hamil/get-riwayat-hamil') }}",
         data:{ no_registrasi:no_reg },
         success:function(data){
           //console.log(data);
